@@ -1,0 +1,27 @@
+* using log directory ‘/Users/eu/Shared/experiments/rcpp-1/eu1/..Rcheck’
+* using R version 3.4.3 (2017-11-30)
+* using platform: x86_64-apple-darwin15.6.0 (64-bit)
+* using session charset: UTF-8
+* checking for file ‘./DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘eu1’ version ‘1.0’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... WARNING
+Subdirectory ‘eu1/src’ contains apparent object files/libraries
+  eu1.so rcpp_hello_world.o
+Object files/libraries should not be included in a source package.
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  ..Rcheck
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘eu1’ can be installed ... ERROR
+Installation failed.
+See ‘/Users/eu/Shared/experiments/rcpp-1/eu1/..Rcheck/00install.out’ for details.
+* DONE
+Status: 1 ERROR, 1 WARNING, 1 NOTE
