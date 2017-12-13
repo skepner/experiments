@@ -1,5 +1,9 @@
+# -*- Makefile -*-
 CXX_ROOT = /usr/local/opt/llvm
-PKG_CXX = $(CXX_ROOT)/bin/clang++
+override CXX17 = $(CXX_ROOT)/bin/clang++
 CXX_STD = CXX17
 PKG_CXXFLAGS = -g -O3 -Wno-weak-vtables -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded
 PKG_LIBS = -lz -L$(CXX_ROOT)/lib -lc++experimental -lc++
+
+# bug in R or Rcpp?
+override SHLIB_LIBADD =

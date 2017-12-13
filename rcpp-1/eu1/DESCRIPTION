@@ -9,4 +9,3 @@ Description: the very first attempt
 License: MIT
 Imports: Rcpp (>= 0.12.14)
 LinkingTo: Rcpp
-SystemRequirements: C++17
