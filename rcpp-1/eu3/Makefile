@@ -14,8 +14,11 @@ all:
 	@echo test
 	@echo clean
 
-install: build | $(LIB_DIR)
-	cd $(ROOT_DIR); R CMD INSTALL -l $(LIB_DIR) $(PKG_DIR)/$(PKG_NAME)_*.tar.gz
+install: # build | $(LIB_DIR)
+	R CMD INSTALL --clean --debug -l $(LIB_DIR) $(PKG_DIR)/$(PKG_NAME)_*.tar.gz
+
+bin: build | $(LIB_DIR)
+	cd $(ROOT_DIR); R CMD INSTALL --build --clean --debug -l $(LIB_DIR) $(PKG_DIR)/$(PKG_NAME)_*.tar.gz
 
 build: compile-attributes | $(PKG_DIR)
 	D=$$(pwd) && cd $(PKG_DIR) && R CMD build "$$D"

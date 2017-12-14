@@ -29,3 +29,10 @@ fi
 detach("package:eu2", unload=TRUE)
 library(eu2, lib.loc="/r/R/library")
 ls("package:eu2")
+
+
+library(eu3, lib.loc="/r/R/l")
+ls("package:eu3")
+a=new(acmacs.Color, "violet")
+a$name
+a$hex
