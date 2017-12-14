@@ -1,0 +1,11 @@
+Package: eu2
+Type: Package
+Title: eu module test
+Version: 0.1
+Date: 2017-12-14
+Author: Eugene Skepner
+Maintainer: Eugene Skepner <eu@antigenic-cartography.org>
+Description: eu module test
+License: GPL (>= 2)
+Imports: methods, Rcpp (>= 0.12.14)
+LinkingTo: Rcpp
