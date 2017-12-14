@@ -1,0 +1,11 @@
+Package: eu3
+Type: Package
+Title: eu external libacmacsbase
+Version: 0.1
+Date: 2017-12-14
+Author: Eugene Skepner
+Maintainer: Eugene Skepner <eu@antigenic-cartography.org>
+Description: color converter using Color of acmacs-base
+License: GPL (>= 2)
+Imports: methods, Rcpp (>= 0.12.14)
+LinkingTo: Rcpp
