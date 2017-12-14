@@ -26,4 +26,6 @@ fi
 .libPaths()
 
 # unload library
-detach("package:eu1", unload=TRUE)
+detach("package:eu2", unload=TRUE)
+library(eu2, lib.loc="/r/R/library")
+ls("package:eu2")
