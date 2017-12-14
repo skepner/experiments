@@ -23,7 +23,7 @@ compile-attributes:
 	Rscript -e "library(Rcpp); compileAttributes(verbose=TRUE);"
 
 test:
-	R_LIBS=/r/R/library Rscript -e "library("$(PKG_NAME)"); rcpp_hello_world();"
+	R_LIBS=/r/R/library R --vanilla -q -e 'library('$(PKG_NAME)'); a = new(World); a$$set("aloha"); a$$greet();'
 
 clean:
 	rm -rf $(OUT_DIR) $(PKG_DIR)/$(PKG_NAME)_*.tar.gz $(LIB_DIR)/$(PKG_NAME)
