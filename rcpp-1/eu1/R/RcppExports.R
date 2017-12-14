@@ -5,3 +5,7 @@ rcpp_hello_world <- function() {
     .Call(`_eu1_rcpp_hello_world`)
 }
 
+eu_double <- function() {
+    .Call(`_eu1_eu_double`)
+}
+

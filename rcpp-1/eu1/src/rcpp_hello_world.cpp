@@ -1,4 +1,5 @@
-#include "rcpp.hh"
+#include <Rcpp.h>
+// #include "rcpp.hh"
 
 Rcpp::List rcpp_hello_world();
 
@@ -9,4 +10,10 @@ Rcpp::List rcpp_hello_world()
     auto y = Rcpp::NumericVector::create( 1967.0, 1980.0 );
     auto z = Rcpp::List::create( x, y );
     return z;
+}
+
+// [[Rcpp::export]]
+double eu_double()
+{
+    return 1967.1967;
 }
