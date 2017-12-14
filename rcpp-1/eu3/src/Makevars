@@ -20,11 +20,3 @@ all: $(SHLIB)
 	/usr/bin/install_name_tool -change /usr/local/opt/llvm/lib/libc++.1.dylib @loader_path/libc++.1.dylib eu3.so
 	/usr/bin/install_name_tool -change /usr/local/opt/llvm/lib/libc++.1.dylib @loader_path/libc++.1.dylib /r/R/library/eu3/libs/libacmacsbase.1.dylib
 	cp /usr/local/opt/llvm/lib/libc++.1.dylib /r/R/library/eu3/libs
-
-#	@echo "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP"
-#	cp /Users/eu/AD/lib/libacmacsbase.1.dylib .
-#	/usr/bin/install_name_tool -change /Users/eu/AD/lib/libacmacsbase.1.dylib @loader_path/libacmacsbase.1.dylib eu3.so
-#	cp /usr/local/opt/llvm/lib/libc++.1.dylib .
-#	/usr/bin/install_name_tool -change /usr/local/opt/llvm/lib/libc++.1.dylib @loader_path/libc++.1.dylib eu3.so
-#	ls -l
-#	otool -L eu3.so
