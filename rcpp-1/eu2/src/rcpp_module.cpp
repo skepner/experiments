@@ -1,4 +1,4 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
+// -*- mode: C++; -*-
 //
 // rcpp_module.cpp: Rcpp R/C++ interface class library -- Rcpp Module examples
 //
@@ -19,6 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Rcpp.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <iostream>
 #include <Rcpp.h>
 
 std::string hello() {
@@ -47,7 +48,8 @@ void bla2( int x, double y) {
 
 class World {
 public:
-    World() : msg("hello") {}
+    World() : msg("hello") { Rprintf("constructor\n"); }
+    ~World() { Rprintf("destructor %s\n", msg.data()); }
     void set(std::string msg) { this->msg = msg; }
     std::string greet() { return msg; }
 
@@ -81,5 +83,3 @@ RCPP_MODULE(yada){
     .method("set", &World::set     , "set the message")
     ;
 }
-
-
