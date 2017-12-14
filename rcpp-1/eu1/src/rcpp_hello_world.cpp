@@ -1,11 +1,12 @@
-#include <Rcpp.h>
-using namespace Rcpp;
+#include "rcpp.hh"
+
+Rcpp::List rcpp_hello_world();
 
 // [[Rcpp::export]]
-List rcpp_hello_world()
+Rcpp::List rcpp_hello_world()
 {
-    auto x = CharacterVector::create("name", "of") ;
-    auto y = NumericVector::create( 1967.0, 1980.0 );
-    auto z = List::create( x, y );
+    auto x = Rcpp::CharacterVector::create("name", "of") ;
+    auto y = Rcpp::NumericVector::create( 1967.0, 1980.0 );
+    auto z = Rcpp::List::create( x, y );
     return z;
 }

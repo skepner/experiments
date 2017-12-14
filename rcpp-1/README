@@ -2,3 +2,9 @@ library(Rcpp)
 help(Rcpp.package.skeleton)
 
 Rcpp.package.skeleton(name="eu1", path="/Users/eu/Shared/experiments/rcpp-1", author="Eugene Skepner", email="eu@antigenic-cartography.org", license="MIT")
+
+# load library from local dir
+library(eu1, lib.loc="~/Shared/experiments/rcpp-1/eu1/eu1.Rcheck")
+
+# unload library
+detach("package:eu1", unload=TRUE)
