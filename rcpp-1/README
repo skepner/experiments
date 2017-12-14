@@ -6,5 +6,15 @@ Rcpp.package.skeleton(name="eu1", path="/Users/eu/Shared/experiments/rcpp-1", au
 # load library from local dir
 library(eu1, lib.loc="~/Shared/experiments/rcpp-1/eu1/eu1.Rcheck")
 
+# library search path via env var
+if [ -n $R_LIBS ]; then
+   export R_LIBS=/usr/me/local/R/library:$R_LIBS
+else
+   export R_LIBS=/usr/me/local/R/library
+fi
+
+# current lib load path in R
+.libPaths()
+
 # unload library
 detach("package:eu1", unload=TRUE)
