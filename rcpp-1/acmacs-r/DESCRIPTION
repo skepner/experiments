@@ -1,0 +1,11 @@
+Package: acmacs.r
+Type: Package
+Title: low level access to the data stored in acmacs files
+Version: 0.1
+Date: 2017-12-15
+Author: Eugene Skepner
+Maintainer: Eugene Skepner <eu@antigenic-cartography.org>
+Description: Reading/writing acmacs and lispmds files, accessing data stored in those files
+License: GPL (>= 2)
+Imports: methods, Rcpp (>= 0.12.14)
+LinkingTo: Rcpp
