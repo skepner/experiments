@@ -1,0 +1,37 @@
+#! /usr/bin/python
+
+import sys, os, subprocess
+
+# ----------------------------------------------------------------------
+
+def main(target_package_dir, *libraries):
+    to_process = set(libraries)
+    processed = set()
+    while to_process:
+        library = to_process.pop()
+        processed.add(library)
+        for linked_to in subprocess.check_output(["/usr/bin/otool", "-L", library]).split("\n")[1:]:
+            print linked_to
+            name = linked_to.split("(")[0].strip()
+            if os.path.basename(library) != os.path.basename(name) and name[:9] != "/usr/lib/" and name[:27] != "/System/Library/Frameworks/" and name[:32] != "/Library/Frameworks/R.framework/" and name not in processed:
+                to_process.add(name)
+                print "+++", name
+
+# ----------------------------------------------------------------------
+
+try:
+    if sys.platform != 'darwin':
+        raise RuntimeError("this script cannot be run on " + sys.platform)
+    if len(sys.argv) < 3:
+        raise RuntimeError("Usage: %s <target_package_dir> <library> ..." % sys.argv[0])
+    main(*sys.argv[1:])
+except Exception, err:
+    print >>sys.stderr, "ERROR:", err
+
+# ----------------------------------------------------------------------
+
+# /usr/bin/install_name_tool -change /Users/eu/AD/lib/libacmacsbase.1.dylib @loader_path/libacmacsbase.1.dylib eu3.so
+# cp /Users/eu/AD/lib/libacmacsbase.1.dylib /r/R/library/eu3/libs
+# /usr/bin/install_name_tool -change /usr/local/opt/llvm/lib/libc++.1.dylib @loader_path/libc++.1.dylib eu3.so
+# /usr/bin/install_name_tool -change /usr/local/opt/llvm/lib/libc++.1.dylib @loader_path/libc++.1.dylib /r/R/library/eu3/libs/libacmacsbase.1.dylib
+# cp /usr/local/opt/llvm/lib/libc++.1.dylib /r/R/library/eu3/libs

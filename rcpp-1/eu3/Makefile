@@ -18,7 +18,7 @@ all:
 	@echo test
 	@echo clean
 
-install: # build | $(LIB_DIR)
+install: build | $(LIB_DIR)
 	R CMD INSTALL --clean --debug -l $(LIB_DIR) $(PKG_DIR)/$(PKG_NAME)_*.tar.gz
 
 bin: build | $(LIB_DIR)
