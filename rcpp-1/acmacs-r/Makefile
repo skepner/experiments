@@ -34,7 +34,8 @@ compile-attributes:
 	Rscript -e "library(Rcpp); compileAttributes(verbose=TRUE);"
 
 test:
-	R_LIBS=/r/R/library R --vanilla -q -e 'library('$(PKG_NAME)'); ls("package:eu3"); a = new(acmacs.Color, "darkred"); a$$hex; a$$name; gc();'
+	@#R_LIBS=/r/R/library R --vanilla -q -e 'library('$(PKG_NAME)'); ls("package:acmacs.r"); a = new(acmacs.Chart, "/Users/eu/AD/sources/acmacs-chart-2/test/test-2004-3.ace"); a$$number_of_antigens; gc();'
+	R_LIBS=/r/R/library Rscript --vanilla --default-packages=methods,utils ~/Shared/experiments/rcpp-1/acmacs-r/tests/testthat.R
 
 clean:
 	rm -rf $(OUT_DIR) $(ROOT_DIR)/$(PKG_NAME)_*.tgz $(PKG_DIR)/$(PKG_NAME)_*.tar.gz $(LIB_DIR)/$(PKG_NAME)
