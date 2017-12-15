@@ -7,6 +7,10 @@ PKG_DIR = $(ROOT_DIR)/pkg
 LIB_DIR = $(ROOT_DIR)/library
 OUT_DIR = $(ROOT_DIR)/$(PKG_NAME)
 
+ifneq ($(T),"")
+  export TMPDIR = $(T)
+endif
+
 all:
 	@echo install
 	@echo build
