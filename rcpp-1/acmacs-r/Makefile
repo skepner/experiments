@@ -2,9 +2,9 @@
 
 PKG_NAME = acmacs.r
 
-ifneq ($(R),"")
+ifneq ($(R),)
   ROOT_DIR = $(R)/R
-else ifeq ($(ROOT_DIR), "")
+else ifeq ($(ROOT_DIR),)
   $(error Please provide ROOT_DIR, e.g. make ROOT_DIR=/my/local/r/installation)
 endif
 
