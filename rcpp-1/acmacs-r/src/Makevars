@@ -13,7 +13,7 @@ endif
 
 ifeq ($(shell uname),Darwin)
   CXX_ROOT = /usr/local/opt/llvm
-  override CXX17 = $(CXX_ROOT)/bin/clang++
+  override CXX17 = $(CXX_ROOT)/bin/clang++ -std=c++17
   PKG_CXXFLAGS += -O3
   # -Wno-weak-vtables -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-padded
 else
