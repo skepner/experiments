@@ -10,10 +10,10 @@ namespace acmacs_r
     template <typename T> class wrapper
     {
      public:
-        using owning_t = T;
+        // using owning_t = T;
         inline wrapper() = default;
         inline wrapper(std::shared_ptr<T> obj) : obj_(obj) {}
-        inline std::shared_ptr<T> operator*() { return obj_; }
+        // inline std::shared_ptr<T> operator*() { return obj_; }
         std::shared_ptr<T> obj_;
 
         template <auto (T::*property)() const> auto getter() const
