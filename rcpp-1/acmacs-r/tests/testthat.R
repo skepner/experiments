@@ -17,7 +17,7 @@ show_chart_data <- function(chart) {
     format_antigen <- function(a) { paste(c(a$name, a$passage, a$reassortant, a$reference, a$annotations, paste("[", a$date, "]", sep="", collapse=""), a$lab_ids), collapse=" ", sep="") }
     cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:min(50, length(ags))], format_antigen), collapse="\n  "), "\n")
     srs <- chart$sera
-    format_serum <- function(a) { paste(c(a$name, a$annotations), collapse=" ", sep="") }
+    format_serum <- function(a) { paste(c(a$name, a$annotations, a$serum_id, a$serum_species), collapse=" ", sep="") }
     cat("sera:", length(srs), "\n ", paste(sapply(srs[1:min(80, length(srs))], format_serum), collapse="\n  "), "\n")
 }
 

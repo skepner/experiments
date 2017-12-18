@@ -92,6 +92,7 @@ RCPP_MODULE(acmacs)
 
     class_<Antigen>("acmacs.Antigen")
             .property<std::string>("name", &Antigen::getT<std::string, &acmacs::chart::Antigen::name>)
+            .property<std::string>("abbreviated_name", &Antigen::getT<std::string, &acmacs::chart::Antigen::abbreviated_name>)
             .property<std::string>("date", &Antigen::getT<std::string, &acmacs::chart::Antigen::date>)
             .property<std::string>("passage", &Antigen::getT<std::string, &acmacs::chart::Antigen::passage>)
             .property<std::string>("lineage", &Antigen::getT<std::string, &acmacs::chart::Antigen::lineage>)
@@ -99,13 +100,17 @@ RCPP_MODULE(acmacs)
             .property<bool>("reference", &Antigen::get<&acmacs::chart::Antigen::reference>)
             .property<Rcpp::StringVector>("lab_ids", &Antigen::getSV<&acmacs::chart::Antigen::lab_ids>)
             .property<Rcpp::StringVector>("annotations", &Antigen::getSV<&acmacs::chart::Antigen::annotations>)
-            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
             ;
 
     class_<Serum>("acmacs.Serum")
             .property<std::string>("name", &Serum::getT<std::string, &acmacs::chart::Serum::name>)
+            .property<std::string>("abbreviated_name", &Serum::getT<std::string, &acmacs::chart::Serum::abbreviated_name>)
             .property<std::string>("passage", &Serum::getT<std::string, &acmacs::chart::Serum::passage>)
+            .property<std::string>("lineage", &Serum::getT<std::string, &acmacs::chart::Serum::lineage>)
+            .property<std::string>("reassortant", &Serum::getT<std::string, &acmacs::chart::Serum::reassortant>)
             .property<Rcpp::StringVector>("annotations", &Serum::getSV<&acmacs::chart::Serum::annotations>)
+            .property<std::string>("serum_id", &Serum::getT<std::string, &acmacs::chart::Serum::serum_id>)
+            .property<std::string>("serum_species", &Serum::getT<std::string, &acmacs::chart::Serum::serum_species>)
             ;
 }
 
