@@ -14,7 +14,7 @@ show_chart_data <- function(chart) {
     cat("info:", chart$info, "\n\n")
 
     ags <- chart$antigens
-    cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:5], function(a) { a$name }), collapse="\n  "), "\n")
+    cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:50], function(a) { paste(a$name, a$passage, a$reassortant, a$reference, paste("[", a$date, "]", sep="", collapse="")) }), collapse="\n  "), "\n")
     srs <- chart$sera
     cat("sera:", length(srs), "\n ", paste(sapply(srs[1:5], function(a) { a$name }), collapse="\n  "), "\n")
 }

@@ -77,17 +77,25 @@ RCPP_MODULE(acmacs)
             .property<std::string>("lineage", &Chart::get<&acmacs::chart::Chart::lineage>)
             .property<std::string>("info", &Chart::get<&acmacs::chart::Chart::make_info>, "multi-line string brifly describing data stored in the chart")
             .property<std::string>("name", &Chart::name)
-              // .property<Rcpp::List>("antigens", &Chart::antigens)
             .property<Rcpp::List>("antigens", &Chart::getList<Antigen, &acmacs::chart::Chart::antigens>)
             .property<Rcpp::List>("sera", &Chart::getList<Serum, &acmacs::chart::Chart::sera>)
             ;
 
     class_<Antigen>("acmacs.Antigen")
             .property<std::string>("name", &Antigen::getT<std::string, &acmacs::chart::Antigen::name>)
+            .property<std::string>("date", &Antigen::getT<std::string, &acmacs::chart::Antigen::date>)
+            .property<std::string>("passage", &Antigen::getT<std::string, &acmacs::chart::Antigen::passage>)
+            .property<std::string>("lineage", &Antigen::getT<std::string, &acmacs::chart::Antigen::lineage>)
+            .property<std::string>("reassortant", &Antigen::getT<std::string, &acmacs::chart::Antigen::reassortant>)
+            .property<bool>("reference", &Antigen::get<&acmacs::chart::Antigen::reference>)
+            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
+            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
+            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
             ;
 
     class_<Serum>("acmacs.Serum")
             .property<std::string>("name", &Serum::getT<std::string, &acmacs::chart::Serum::name>)
+            .property<std::string>("passage", &Serum::getT<std::string, &acmacs::chart::Serum::passage>)
             ;
 }
 
