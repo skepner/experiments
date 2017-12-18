@@ -35,6 +35,15 @@ template <typename T> class wrapper
             return result;
         }
 
+    template <auto (T::*property)() const> Rcpp::StringVector getSV() const
+        {
+            auto elements = ((*obj_).*property)();
+            Rcpp::StringVector result(elements.size());
+            for (size_t i = 0; i < elements.size(); ++i)
+                result[i] = elements[i];
+            return result;
+        }
+
 }; // class wrapper<>
 
 // ----------------------------------------------------------------------
@@ -88,14 +97,15 @@ RCPP_MODULE(acmacs)
             .property<std::string>("lineage", &Antigen::getT<std::string, &acmacs::chart::Antigen::lineage>)
             .property<std::string>("reassortant", &Antigen::getT<std::string, &acmacs::chart::Antigen::reassortant>)
             .property<bool>("reference", &Antigen::get<&acmacs::chart::Antigen::reference>)
-            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
-            // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
+            .property<Rcpp::StringVector>("lab_ids", &Antigen::getSV<&acmacs::chart::Antigen::lab_ids>)
+            .property<Rcpp::StringVector>("annotations", &Antigen::getSV<&acmacs::chart::Antigen::annotations>)
             // .property<std::string>("", &Antigen::getT<std::string, &acmacs::chart::Antigen::>)
             ;
 
     class_<Serum>("acmacs.Serum")
             .property<std::string>("name", &Serum::getT<std::string, &acmacs::chart::Serum::name>)
             .property<std::string>("passage", &Serum::getT<std::string, &acmacs::chart::Serum::passage>)
+            .property<Rcpp::StringVector>("annotations", &Serum::getSV<&acmacs::chart::Serum::annotations>)
             ;
 }
 

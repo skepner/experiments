@@ -14,14 +14,16 @@ show_chart_data <- function(chart) {
     cat("info:", chart$info, "\n\n")
 
     ags <- chart$antigens
-    cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:50], function(a) { paste(a$name, a$passage, a$reassortant, a$reference, paste("[", a$date, "]", sep="", collapse="")) }), collapse="\n  "), "\n")
+    format_antigen <- function(a) { paste(c(a$name, a$passage, a$reassortant, a$reference, a$annotations, paste("[", a$date, "]", sep="", collapse=""), a$lab_ids), collapse=" ", sep="") }
+    cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:min(50, length(ags))], format_antigen), collapse="\n  "), "\n")
     srs <- chart$sera
-    cat("sera:", length(srs), "\n ", paste(sapply(srs[1:5], function(a) { a$name }), collapse="\n  "), "\n")
+    format_serum <- function(a) { paste(c(a$name, a$annotations), collapse=" ", sep="") }
+    cat("sera:", length(srs), "\n ", paste(sapply(srs[1:min(80, length(srs))], format_serum), collapse="\n  "), "\n")
 }
 
 print("test ********************************")
 ?acmacs.Chart
 # ??acmacs.Chart
 show_chart_data(new(acmacs.Chart, "/Users/eu/AD/sources/acmacs-chart-2/test/test-2004-3.ace"))
-show_chart_data(new(acmacs.Chart, "/Users/eu/ac/results/ssm/2017-1207-tc0/merges/melb-b-yam-hi.ace"))
+show_chart_data(new(acmacs.Chart, "/Users/eu/ac/results/ssm/2017-1207-tc0/merges/cdc-b-yam-hi.ace"))
 # gc()
