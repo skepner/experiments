@@ -12,9 +12,16 @@ show_chart_data <- function(chart) {
         cat("  lineage:", chart$lineage, "\n")
     }
     cat("info:", chart$info, "\n\n")
+
+    ags <- chart$antigens
+    cat("antigens:", length(ags), "\n ", paste(sapply(ags[1:5], function(a) { a$name }), collapse="\n  "), "\n")
+    srs <- chart$sera
+    cat("sera:", length(srs), "\n ", paste(sapply(srs[1:5], function(a) { a$name }), collapse="\n  "), "\n")
 }
 
 print("test ********************************")
+?acmacs.Chart
+# ??acmacs.Chart
 show_chart_data(new(acmacs.Chart, "/Users/eu/AD/sources/acmacs-chart-2/test/test-2004-3.ace"))
 show_chart_data(new(acmacs.Chart, "/Users/eu/ac/results/ssm/2017-1207-tc0/merges/melb-b-yam-hi.ace"))
-gc()
+# gc()
