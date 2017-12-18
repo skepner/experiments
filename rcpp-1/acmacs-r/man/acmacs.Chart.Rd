@@ -4,7 +4,7 @@
 \docType{package}
 \title{Main class to access data stored in the chart file.}
 \usage{
-new(acmacs.Chart, filename)
+\code{new(acmacs.Chart, filename)}
 }
 %\method{$}chart$number_of_antigens
 %chart$number_of_sera
