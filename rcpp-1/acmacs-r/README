@@ -1,0 +1,5 @@
+library(acmacs.r, lib.loc="/r/R/library")
+
+package?acmacs.r
+class?acmacs.Chart
+methods?acmacs.Chart

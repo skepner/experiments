@@ -22,8 +22,6 @@ show_chart_data <- function(chart) {
 }
 
 print("test ********************************")
-?acmacs.Chart
-# ??acmacs.Chart
 show_chart_data(new(acmacs.Chart, "/Users/eu/AD/sources/acmacs-chart-2/test/test-2004-3.ace"))
 show_chart_data(new(acmacs.Chart, "/Users/eu/ac/results/ssm/2017-1207-tc0/merges/cdc-b-yam-hi.ace"))
 # gc()
