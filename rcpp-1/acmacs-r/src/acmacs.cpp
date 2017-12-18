@@ -1,3 +1,4 @@
+#include <typeinfo>
 #include <Rcpp.h>
 
 #include "acmacs-chart-2/chart.hh"
@@ -13,6 +14,7 @@ namespace acmacs_r
         // using owning_t = T;
         inline wrapper() = default;
         inline wrapper(std::shared_ptr<T> obj) : obj_(obj) {}
+        inline ~wrapper() { Rprintf("~wrapper %s\n", typeid(this).name()); }
         // inline std::shared_ptr<T> operator*() { return obj_; }
         std::shared_ptr<T> obj_;
 
@@ -27,6 +29,7 @@ namespace acmacs_r
     {
      public:
         inline Chart(std::string aFilename) : wrapper(acmacs::chart::import_factory(aFilename, acmacs::chart::Verify::None)) {}
+        inline std::string name() const { return obj_->make_name(); }
 
     }; // class Chart
 
@@ -42,6 +45,11 @@ RCPP_MODULE(acmacs)
             .constructor<std::string>()
             .property<size_t>("number_of_antigens", &acmacs_r::Chart::getter<&acmacs::chart::Chart::number_of_antigens>, "number_of_antigens")
             .property<size_t>("number_of_sera", &acmacs_r::Chart::getter<&acmacs::chart::Chart::number_of_sera>, "number_of_sera")
+            .property<size_t>("number_of_points", &acmacs_r::Chart::getter<&acmacs::chart::Chart::number_of_points>)
+            .property<size_t>("number_of_projections", &acmacs_r::Chart::getter<&acmacs::chart::Chart::number_of_projections>)
+            .property<std::string>("lineage", &acmacs_r::Chart::getter<&acmacs::chart::Chart::lineage>)
+            .property<std::string>("info", &acmacs_r::Chart::getter<&acmacs::chart::Chart::make_info>, "multi-line string brifly describing data stored in the chart")
+            .property<std::string>("name", &acmacs_r::Chart::name)
             ;
 
 }
