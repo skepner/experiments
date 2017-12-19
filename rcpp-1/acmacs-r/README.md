@@ -24,6 +24,22 @@ Package is supposed to be installed from a binary archive for the
 specific platform. Building package from sources is complicated and it
 cannot be done within R.
 
+Package is in an alpha stage, it's worth perhaps installing it into a
+temporary directory, that directory (/tmp/R/library in the example
+below) must exist before you submit install.packages command.
+
+macOS
+-----
+
+```R
+install.packages("https://github.com/skepner/experiments/releases/download/acmacs.r-0.1/acmacs.r_0.1.tgz", lib="/tmp/R/library")
+```
+
+Linux
+-----
+
+Not yet supported.
+
 Usage example
 =============
 
