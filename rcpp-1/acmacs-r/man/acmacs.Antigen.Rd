@@ -6,8 +6,8 @@
 \usage{
 antigen <- chart$antigens[[antigen_number]]
 antigen$name
+antigen$date
 antigen$passage
-antigen$reassortant
 }
 \value{An object of class \code{"acmacs.Antigen"} to access and modify
   antigen data. It has the following properties:
@@ -38,6 +38,19 @@ antigen$reassortant
   used to avoid duplicating antigens in the chart, DISTINCT antigens are
   never merged when tables are merged.}
 
+}
+\examples{
+  # load chart from file
+  chart <- new(acmacs.Chart, "/tmp/table.save")
+  # print information about antigens
+  ags <- chart$antigens
+  format_antigen <- function(a) \{
+    paste(c(a$name, a$passage, a$reassortant, a$reference, a$annotations, paste("[", a$date, "]", sep="", collapse=""), a$lab_ids), collapse=" ", sep="")
+  \}
+  cat("antigens:", length(ags), "\n ", paste(sapply(ags, format_antigen), collapse="\n  "), "\n")
+}
+\seealso{
+ \code{\link{acmacs.Serum}}
 }
 \keyword{ package }
 \author{Eugene Skepner, eu@antigenic-cartography.org.}

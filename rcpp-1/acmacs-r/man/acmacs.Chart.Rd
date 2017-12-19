@@ -34,9 +34,14 @@
 }
 \keyword{ package }
 \examples{
-  # load file
+  # load chart from file
   chart <- new(acmacs.Chart, "/tmp/table.save")
-  # print chart name
-  cat(chart$name)
+  # print information about antigens
+  ags <- chart$antigens
+  format_antigen <- function(a) \{ paste(c(a$name, a$passage, a$reassortant, a$reference, a$annotations, paste("[", a$date, "]", sep="", collapse=""), a$lab_ids), collapse=" ", sep="") \}
+  cat("antigens:", length(ags), "\n ", paste(sapply(ags, format_antigen), collapse="\n  "), "\n")
+}
+\seealso{
+ \code{\link{acmacs.Antigen}} \code{\link{acmacs.Serum}}
 }
 \author{Eugene Skepner, eu@antigenic-cartography.org.}

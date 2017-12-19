@@ -28,6 +28,12 @@
 \details{
  Please see \code{\link{acmacs.Chart}} documentation about package usage and examples.
 }
+\examples{
+  # load file
+  chart <- new(acmacs.Chart, "/tmp/table.save")
+  # print chart name
+  cat(chart$name)
+}
 \keyword{ package }
 \seealso{
  \code{\link{acmacs.Chart}}
