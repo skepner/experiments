@@ -1,5 +1,7 @@
 library(acmacs.r, lib.loc="/r/R/library")
 
+detach("package:acmacs.r", unload = TRUE); library.dynam.unload("acmacs.r", system.file(package="acmacs.r", lib.loc="/r/R/library")); library(acmacs.r, lib.loc="/r/R/library");
+
 package?acmacs.r
 class?acmacs.Chart
 methods?acmacs.Chart

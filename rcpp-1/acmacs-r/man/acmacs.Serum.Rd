@@ -44,7 +44,7 @@ serum$passage
   cat("sera:", length(srs), "\n ", paste(sapply(srs[1:min(80, length(srs))], format_serum), collapse="\n  "), "\n")
 }
 \seealso{
- \code{\link{acmacs.Serum}}
+ \code{\link{acmacs.Antigen}}
 }
 \keyword{ package }
 \author{Eugene Skepner, eu@antigenic-cartography.org.}
