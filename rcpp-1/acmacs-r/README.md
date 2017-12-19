@@ -7,8 +7,9 @@ lispmds files.
 Supported platforms
 ===================
 
-. macOS 10.12 and 10.13
-. Linux
+ - macOS 10.12 and 10.13
+
+ - Linux
 
 Dependencies
 =============
