@@ -28,8 +28,8 @@ Package is in an alpha stage, it's worth perhaps installing it into a
 temporary directory, that directory (/tmp/R/library in the example
 below) must exist before you submit install.packages command.
 
-macOS
------
+macOS 10.12 and 10.13
+---------------------
 
 ```R
 install.packages("https://github.com/skepner/experiments/releases/download/acmacs.r-0.1/acmacs.r_0.1.tgz", lib="/tmp/R/library")
