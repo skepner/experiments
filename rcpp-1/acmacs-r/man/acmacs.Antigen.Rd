@@ -1,8 +1,8 @@
 \name{acmacs.Antigen}
+\title{Class to access antigen related data.}
 \alias{acmacs.Antigen-class}
 \alias{acmacs.Antigen}
 \docType{package}
-\title{Class to acces data antigen related data.}
 \usage{
 antigen <- chart$antigens[[antigen_number]]
 antigen$name

@@ -1,11 +1,11 @@
 \name{acmacs.r-package}
+\title{acmacs.r - the Antigenic Cartography package}
 \alias{acmacs.r-package}
 \alias{acmacs.r}
 \docType{package}
-\title{Access to the data stored in acmacs and lispmds save files}
 \description{
-  This package provides R with access to the data stored in acmacs (and
-  lispmds files).
+  This package provides R with ability to read, modify, save the data stored in acmacs and
+  lispmds files.
 
   \bold{Available features:}
   \enumerate{
