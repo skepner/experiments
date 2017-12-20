@@ -92,6 +92,7 @@ RCPP_MODULE(acmacs)
 
     class_<Antigen>("acmacs.Antigen")
             .property<std::string>("name", &Antigen::getT<std::string, &acmacs::chart::Antigen::name>)
+            .property<std::string>("full_name", &Antigen::getT<std::string, &acmacs::chart::Antigen::full_name>)
             .property<std::string>("abbreviated_name", &Antigen::getT<std::string, &acmacs::chart::Antigen::abbreviated_name>)
             .property<std::string>("date", &Antigen::getT<std::string, &acmacs::chart::Antigen::date>)
             .property<std::string>("passage", &Antigen::getT<std::string, &acmacs::chart::Antigen::passage>)
