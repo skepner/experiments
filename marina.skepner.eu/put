@@ -1,0 +1,2 @@
+#! /bin/bash
+rsync -avz *.jpg *.html albertine:/syn/WebSites/Public/eu/marina
