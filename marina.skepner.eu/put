@@ -1,2 +1,2 @@
 #! /bin/bash
-rsync -avz *.jpg *.html albertine:/syn/WebSites/Public/eu/marina
+rsync -avz *.jpg *.html *.js *.css albertine:/syn/WebSites/Public/eu/marina

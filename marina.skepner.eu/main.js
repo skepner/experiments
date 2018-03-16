@@ -130,7 +130,7 @@ function set_page()
 
     var page_data = sPages[sPage];
     for (var element of page_data.divs) {
-        var img = $("<img src='" + element.img + "-" + sDevTarget[0] + "-1.78-414.jpg' width='" + $(window).width() + "' height='" + ($(window).height() - $("#top-menu").height()) + "'>").appendTo("#page");
+        var img = $("<div height='" + ($(window).height() - $("#top-menu").height()) + "'><img src='" + element.img + "-" + sDevTarget[0] + "-1.78-414.jpg' width='" + $(window).width() + "'></div>").appendTo("#page");
         var img_pos = img.offset(), img_height = img.height();
         // console.log("img pos " + JSON.stringify(img_pos));
         var cap = $("#" + sPage + "_" + element.cap).css({top: img_pos.top + img_height, left: img_pos.left}).show();
