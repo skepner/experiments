@@ -1,8 +1,9 @@
 $(document).ready(function() {
     fix_menu();
     create_sidebar();
-    $( window ).resize(window_resized);
+    $(window).resize(window_resized);
     window_resized();
+    $("iframe").load(set_iframe);
 });
 
 function fix_menu()
@@ -49,33 +50,36 @@ var sDevTargets = {
     }
 };
 
+var sDevTarget = "hdesk";
+
 function window_resized()
 {
     var w = $(window).width();
-    var target = "unknown";
     if (w < $(window).height()) {
         if (w < 450)
-            target = "vmob";
+            sDevTarget = "vmob";
         else
-            target = "vdesk";
+            sDevTarget = "vdesk";
     }
     else {
         if (w < 450)
-            target = "hmobile";
+            sDevTarget = "hmobile";
         else
-            target = "hdesk";
+            sDevTarget = "hdesk";
     }
-    set_target(target);
+    set_target();
 }
 
 
-function set_target(target_name)
+function set_target()
 {
     $('body').removeClass(Object.keys(sDevTargets).join(" "));
-    $('body').addClass(target_name);
-    var target = sDevTargets[target_name];
+    $('body').addClass(sDevTarget);
+    var target = sDevTargets[sDevTarget];
     $('#email').text(target.email);
     $('#phone').text(target.phone);
+
+    set_iframe();
 
     // $('.top.main.fixed .item').addClass("tiny");
 
@@ -83,23 +87,8 @@ function set_target(target_name)
     // $("#top-bar .item").addClass("tiny");
 }
 
-// function set_vertical_desktop()
-// {
-//     $('body').removeClass("vertical-mobile horizontal-mobile horizontal-desktop");
-//     $('body').addClass("vertical-desktop");
-//     $("#top-bar").removeClass("tiny");
-// }
-
-// function set_horizontal_mobile()
-// {
-//     $('body').removeClass("vertical-mobile vertical-desktop horizontal-desktop");
-//     $('body').addClass("horizontal-mobile");
-//     $("#top-bar").addClass("tiny");
-// }
-
-// function set_horizontal_desktop()
-// {
-//     $('body').removeClass("vertical-mobile vertical-desktop horizontal-mobile");
-//     $('body').addClass("horizontal-desktop");
-//     $("#top-bar").removeClass("tiny");
-// }
+function set_iframe()
+{
+    var iframe = $("iframe").contents();
+    iframe.find('img.picture').width($(window).width());
+}
