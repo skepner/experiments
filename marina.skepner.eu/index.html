@@ -7,42 +7,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.0/dist/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.0/dist/semantic.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js"></script>
     <title>Marina Skepner</title>
-
-    <script>
-  $(document)
-    .ready(function() {
-
-      // fix menu when passed
-      $('.masthead')
-        .visibility({
-          once: false,
-          onBottomPassed: function() {
-            $('.fixed.menu').transition('fade in');
-          },
-          onBottomPassedReverse: function() {
-            $('.fixed.menu').transition('fade out');
-          }
-        })
-      ;
-
-      // create sidebar and attach to menu open
-      $('.ui.sidebar')
-        .sidebar('attach events', '.toc.item')
-      ;
-
-    })
-  ;
-  </script>
-
   </head>
   <body>
     <!-- <div class="ui large top fixed hidden menu"> -->
     <div class="ui top main fixed compact borderless hidden menu">
         <a class="launch icon toc item"><i class="sidebar icon"></i></a>
-        <div class="item huge header">Marina Skepner</div>
-        <div class="item"><a href="mailto:zuskepner@gmail.com">zuskepner@gmail.com</a></div>
-        <div class="item"><a href="tel:+4915233605790">+49 152 33605790</a></div>
+        <div class="item header">Marina Skepner</div>
+        <div class="right menu">
+          <div class="item"><a id="email" href="mailto:zuskepner@gmail.com">zuskepner@gmail.com</a></div>
+          <div class="item"><a id="phone" href="tel:+4915233605790">+49 152 33605790</a></div>
+        </div>
     </div>
 
     <!-- <div class="ui vertical inverted sidebar menu"> -->
@@ -59,14 +36,16 @@
       <a class="item">Paintings 2012</a>
     </div>
 
-    <div class="pusher" style="background: url(background.jpg);">
-      <div style="height: 4em;"></div>
-      <img class="ui image" src="chloe-ricoh.jpg" style="float: left">
-      <div style="position: absolute; left: 35em; top: 4em;">
-        <p style="width: 15em;">Für alle, die Kunst lieben, biete ich Kreative Porträts, Zeichnungen und Gemälde auf Bestellung, sowie Zeichen-, Malen- und Linodruckkurse für Kinder und Erwachsene an.</p>
-      </div>
-      <img class="ui image" src="chloe-ricoh.jpg">
-    </div>
+    <iframe class="pusher" src="main.html"></iframe>
+
+    <!-- <div class="pusher" style="background: url(background.jpg);"> -->
+    <!--   <div style="height: 4em;"></div> -->
+    <!--   <img class="ui image" src="chloe-ricoh.jpg" style="float: left"> -->
+    <!--   <div style="position: absolute; left: 35em; top: 4em;"> -->
+    <!--     <p style="width: 15em;">Für alle, die Kunst lieben, biete ich Kreative Porträts, Zeichnungen und Gemälde auf Bestellung, sowie Zeichen-, Malen- und Linodruckkurse für Kinder und Erwachsene an.</p> -->
+    <!--   </div> -->
+    <!--   <img class="ui image" src="chloe-ricoh.jpg"> -->
+    <!-- </div> -->
 
 <!-- Page Contents
 <div class="pusher">
