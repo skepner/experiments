@@ -38,7 +38,7 @@ var sLabels = {
 var sPages = {
     "portrait-drawing": {
         divs: [
-            {img: "chloe-ricoh", cap: "portraets-auf-bestellung"},
+            {img: "chloe-ricoh", cap: "portraets-auf-bestellung", divh: true},
             {img: "chloe-ricoh", cap: "portraits"}
         ]
     },
@@ -129,11 +129,15 @@ function set_page()
     $(".whole-page caption").hide();
 
     var page_data = sPages[sPage];
-    for (var element of page_data.divs) {
-        var img = $("<div height='" + ($(window).height() - $("#top-menu").height()) + "'><img src='" + element.img + "-" + sDevTarget[0] + "-1.78-414.jpg' width='" + $(window).width() + "'></div>").appendTo("#page");
+    page_data.divs.forEach(function(element, element_no) {
+        if (element_no)
+            $("#page").append("<div class='img-separator'></div>");
+        var img = $("<div class='page-img'><img src='" + element.img + "-" + sDevTarget[0] + "-1.78-414.jpg' width='" + $(window).width() + "'></div>").appendTo("#page");
+        if (element.divh)
+            img.css("height", ($(window).height() - $("#top-menu").height()) + "px");
         var img_pos = img.offset(), img_height = img.height();
         // console.log("img pos " + JSON.stringify(img_pos));
         var cap = $("#" + sPage + "_" + element.cap).css({top: img_pos.top + img_height, left: img_pos.left}).show();
         cap.css("top", cap.position().top - cap.height());
-    }
+    });
 }
