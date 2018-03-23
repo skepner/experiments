@@ -126,7 +126,7 @@ function set_page()
 {
     $("#page-top").height($("#top-menu").height());
     $("#page").empty();
-    $("#whole-page caption").hide();
+    $(".whole-page caption").hide();
 
     var page_data = sPages[sPage];
     for (var element of page_data.divs) {
