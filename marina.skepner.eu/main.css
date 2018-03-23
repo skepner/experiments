@@ -30,6 +30,10 @@ div.page-img {
     overflow: hidden;
 }
 
+div.page-img img {
+    display: block;
+}
+
 div.img-separator {
     height: 1em;
     background-color: #F8F8F8;

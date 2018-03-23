@@ -38,7 +38,7 @@ var sLabels = {
 var sPages = {
     "portrait-drawing": {
         divs: [
-            {img: "chloe-ricoh", cap: "portraets-auf-bestellung", divh: true},
+            {img: "chloe-ricoh", cap: "portraets-auf-bestellung", capover: true, divh: true},
             {img: "fedor"},
             {img: "ib-lev-clock"},
             {img: "ib-lisa-chloe"},
@@ -76,7 +76,7 @@ var sDevTargets = {
         email: sLabels.email_address,
         phone: sLabels.phone
     },
-    "hmobile": {
+    "hmob": {
         email: sLabels.email_address,
         phone: sLabels.phone
     },
@@ -90,16 +90,15 @@ var sDevTarget = "hdesk";
 
 function window_resized()
 {
-    var w = $(window).width();
-    if (w < $(window).height()) {
-        if (w < 450)
+    if ($(window).width() < $(window).height()) {
+        if ($(window).width() < 450)
             sDevTarget = "vmob";
         else
             sDevTarget = "vdesk";
     }
     else {
-        if (w < 450)
-            sDevTarget = "hmobile";
+        if ($(window).height() < 450)
+            sDevTarget = "hmob";
         else
             sDevTarget = "hdesk";
     }
@@ -135,14 +134,24 @@ function set_page()
     page_data.divs.forEach(function(element, element_no) {
         if (element_no)
             $("#page").append("<div class='img-separator'></div>");
-        var img = $("<div class='page-img'><img src='" + element.img + "-" + sDevTarget[0] + "-414.jpg' width='" + $(window).width() + "'></div>").appendTo("#page");
+        var img_div = $("<div class='page-img'></div>").appendTo("#page");
+        var img = $("<img src='" + element.img + "-" + sDevTarget + ".jpg'>").appendTo(img_div);
+        img.css("width", $(window).width());
         if (element.divh)
-            img.css("height", ($(window).height() - $("#top-menu").height()) + "px");
-        var img_pos = img.offset(), img_height = img.height();
+            img_div.css("height", ($(window).height() - $("#top-menu").height()) + "px");
         // console.log("img pos " + JSON.stringify(img_pos));
         if (element.cap) {
-            var cap = $("#" + sPage + "_" + element.cap).css({top: img_pos.top + img_height, left: img_pos.left}).show();
-            cap.css("top", cap.position().top - cap.height());
+            var cap = $("#" + sPage + "_" + element.cap).show();
+            if (element.capover) {
+                var img_pos = img_div.offset(), img_height = img_div.height();
+                if ($(window).width() < $(window).height()) {
+                    cap.css({top: img_pos.top + img_height - cap.height() - 5, left: img_pos.left, width: img_div.width() - 10, "margin-left": "5px"});
+                }
+                else {
+                    cap.css({top: img_pos.top, left: img_pos.left, width: img_div.width() * 0.3});
+                    cap.css("left", img_div.width() - cap.width() - 5);
+                }
+            }
         }
     });
 }
