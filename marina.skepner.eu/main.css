@@ -32,6 +32,7 @@ div.page-img {
 
 div.page-img img {
     display: block;
+    /* border: 1px solid red; */
 }
 
 div.img-separator {
