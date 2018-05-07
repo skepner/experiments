@@ -1,4 +1,4 @@
-all: mod_example
+all: mod_ace
 
 ifneq (,$(wildcard /usr/local/opt/llvm/bin/clang++))
   CXX=/usr/local/opt/llvm/bin/clang++
@@ -10,16 +10,23 @@ endif
 
 AD_INCLUDE = -I$(HOME)/AD/include
 LD_LIBS = -L$(HOME)/AD/lib -lacmacsbase.1
-APR_CFLAGS = $(shell pkg-config --cflags apr-1)
-APR_LIBS = $(shell pkg-config --libs apr-1)
+# APR_CFLAGS = $(shell pkg-config --cflags apr-1)
+# APR_LIBS = $(shell pkg-config --libs apr-1)
 
-# mod_example: mod_example.cc
-#	@#apxs -S CC=$(CXX) -S CFLAGS="$(CXX_STD)" $(LD_LIBS) -n example_module -c $^
-#	apxs -n example_module -c $^
+APXS_CXX = -S CC=$(CXX) -Wc,$(CXX_STD) -Wl,-shared
 
-mod_example: mod_example.o
-	apxs -i -n example_module $(LD_LIBS) $(APR_LIBS) -c mod_example.o
-	@#$(CXX) -dynamiclib -o $@ $^ $(LD_LIBS) $(APR_LIBS) -lpthread -module
+mod_ace: mod_ace.la
+	ldd .libs/mod_ace.so
 
-%.o: %.cc
-	$(CXX) $(CXX_STD) $(AD_INCLUDE) $(APR_CFLAGS) -fPIC -DPIC -c $^
+mod_ace.la: mod_ace.c
+	apxs $(APXS_CXX) $(AD_INCLUDE) -n ace_module $(LD_LIBS) -c $^
+
+clean:
+	rm -rf out .libs *.o *.lo *.slo *.la
+
+# mod_ace: out/mod_ace.o
+#	apxs -n ace_module -Wl,-shared $(LD_LIBS) $(APR_LIBS) -c out/mod_ace.o
+
+# out/%.o: %.cc
+#	mkdir -p out
+#	$(CXX) $(CXX_STD) $(AD_INCLUDE) $(APR_CFLAGS) -fPIC -DPIC -c $^ -o $@

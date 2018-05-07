@@ -1,2 +1,6 @@
 .libs
+out
 *.o
+*.la
+*.lo
+*.slo
