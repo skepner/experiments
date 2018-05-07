@@ -5,15 +5,6 @@
     <script>
       $(document).ready(function() {
       console.log("start", document);
-      var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-  $.getJSON( flickerAPI, {
-    tags: "mount rainier",
-    tagmode: "any",
-    format: "json"
-  })
-      .done(function( data ) {
-      console.log("flickr", data);
-      });
 
       $.getJSON({url: "/example.example"}).done(function (data) { console.log("data", data); });
       // $.ajax({url: "example.example", success: () => console.log("success")}).then(() => console.log("done"));

@@ -1,3 +1,5 @@
+#include <string>
+
 #include "apache2/httpd.h"
 #include "apache2/http_core.h"
 #include "apache2/http_protocol.h"
@@ -22,7 +24,7 @@ static int example_handler(request_rec *r) {
     if (!r->handler || strcmp(r->handler, "example"))
         return (DECLINED);
 
-    ap_set_content_type(r, "application/javascript");
+    ap_set_content_type(r, "application/json");
     ap_rprintf(r, "{N: \"Hello, world! filename:[%s] args:[%s]\", b:2, c:3, d:{a:2}}\n\n", r->filename, r->args);
     return OK;
 }
