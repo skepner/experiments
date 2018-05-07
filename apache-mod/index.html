@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      $(document).ready(function() {
+      console.log("start", document);
+      var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+  $.getJSON( flickerAPI, {
+    tags: "mount rainier",
+    tagmode: "any",
+    format: "json"
+  })
+      .done(function( data ) {
+      console.log("flickr", data);
+      });
+
+      $.getJSON({url: "/example.example"}).done(function (data) { console.log("data", data); });
+      // $.ajax({url: "example.example", success: () => console.log("success")}).then(() => console.log("done"));
+      // $.getJSON("example.example").done(function(data) { console.log("A", data, arguments); });
+      });
+    </script>
+  </head>
+  <body>
+    JOPA
+  </body>
+</html>
