@@ -13,7 +13,7 @@ LD_LIBS = -L$(HOME)/AD/lib -lacmacsbase.1
 # APR_CFLAGS = $(shell pkg-config --cflags apr-1)
 # APR_LIBS = $(shell pkg-config --libs apr-1)
 
-APXS_CXX = -S CC=$(CXX) -Wc,$(CXX_STD) -Wl,-shared
+APXS_CXX = -S CC=$(CXX) -Wc,-x -Wc,c++ -Wc,$(CXX_STD) -Wl,-shared
 
 mod_ace: mod_ace.la
 	ldd .libs/mod_ace.so
