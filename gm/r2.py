@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 
+# https://developers.google.com/gmail/api/quickstart/python
 # https://github.com/abhishekchhibber/Gmail-Api-through-Python/blob/master/gmail_read.py
 
 # pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-# pip3 install --upgrade google-auth
+#? pip3 install --upgrade google-auth
 
 # Visit
 # https://developers.google.com/gmail/api/quickstart/python
@@ -15,22 +16,52 @@
 
 # ======================================================================
 
-import pprint
+import pickle, pprint
+from pathlib import Path
 
-from google.oauth2 import service_account
+
+
+# from google.oauth2 import service_account
 
 # ======================================================================
 
 GM_DATA_DIR = "/d/gm"
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'] # "https://www.googleapis.com/auth/gmail.modify"
 
-credentials = service_account.Credentials.from_service_account_file(f"{GM_DATA_DIR}/credentials.json")
-scoped_credentials = credentials.with_scopes(["https://www.googleapis.com/auth/gmail.modify"])
+# ----------------------------------------------------------------------
 
-# credentials, project = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
-# credentials, project = google.auth.default(scopes=["https://www.googleapis.com/auth/gmail.modify"])
-# credentials, project = google.auth.default()
+def main():
+    gmail = connect()
+    messages = gmail.users().messages().list(userId='me',labelIds=["INBOX"]).execute()["messages"]
+    # pprint.pprint(messages)
+    for message_ref in messages:
+        message = gmail.users().messages().get(userId="me", id=message_ref["id"]).execute()
+        pprint.pprint(message)
+
+# ----------------------------------------------------------------------
+
+def connect():
+    token_file = Path(f"{GM_DATA_DIR}/token.pickle")
+    if token_file.exists():
+        creds = pickle.load(token_file.open("rb"))
+    else:
+        creds = None
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            import google.auth.transport.requests
+            creds.refresh(google.auth.transport.requests.Request())
+        else:
+            import google_auth_oauthlib.flow
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(f"{GM_DATA_DIR}/credentials.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+        pickle.dump(creds, token_file.open("wb"))
+    import googleapiclient.discovery
+    return googleapiclient.discovery.build('gmail', 'v1', credentials=creds)
+
+# ----------------------------------------------------------------------
+
+main()
 
 # **********************************************************************
 # **********************************************************************
@@ -158,4 +189,3 @@ scoped_credentials = credentials.with_scopes(["https://www.googleapis.com/auth/g
 
 
 # print ("Total messaged retrived: ", str(len(final_list)))
-
