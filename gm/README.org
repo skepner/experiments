@@ -1,0 +1,18 @@
+# Time-stamp: <2019-10-28 13:02:59 eu>
+keywords: 
+* [2019-10-28 Mon 13:01]
+
+https://developers.google.com/gmail/api/quickstart/python
+
+https://github.com/abhishekchhibber/Gmail-Api-through-Python
+
+* COMMENT local vars ======================================================================
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+#+STARTUP: showall indent
+Local Variables:
+eval: (auto-fill-mode 0)
+eval: (add-hook 'before-save-hook 'time-stamp)
+eval: (set (make-local-variable 'org-confirm-elisp-link-function) nil)
+End:
