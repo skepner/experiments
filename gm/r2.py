@@ -69,7 +69,12 @@ def make_reply(gmail, message_id):
             message["from"] = hdr["value"]
         elif hdr["name"] == "Subject":
             message["subject"] = hdr["value"]
-    pprint.pprint(message)
+    if message_data["payload"].get("body") and message_data["payload"]["body"]["size"] > 0:
+        message["body"] = message_data["payload"]["body"]
+    else:
+        
+        pprint.pprint(message)
+    pprint.pprint(message_data)
     
 # ----------------------------------------------------------------------
 
