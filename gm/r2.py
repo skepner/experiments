@@ -31,7 +31,7 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'] # "https://www.googl
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "-h":
-        print(f"Usage: {sys.argv[0]} [list] [reply:message-id]", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} [list] [meta] [reply:message-id]", file=sys.stderr)
         exit(1)
     exit_code = 0
     gmail = connect()
@@ -41,6 +41,8 @@ def main():
         for action in sys.argv[1:]:
             if action == "list":
                 list_messages(gmail)
+            elif action == "meta":
+                meta(gmail)
             elif action.startswith("reply:"):
                 make_reply(gmail, action[6:])
             else:
@@ -61,27 +63,57 @@ def list_messages(gmail):
 
 # ----------------------------------------------------------------------
 
+def meta(gmail):
+    messages = gmail.users().messages().list(userId='me',labelIds=["INBOX"]).execute()["messages"]
+    meta = [metadata(gmail, message_ref["id"]) for message_ref in messages]
+    pprint.pprint(meta)
+
+# ----------------------------------------------------------------------
+
 def make_reply(gmail, message_id):
     message_data = gmail.users().messages().get(userId="me", id=message_id).execute()
-    message = {"id": message_id}
+    message = {"id": message_id, "body": get_body(message_data["payload"])}
     for hdr in message_data["payload"]["headers"]:
         if hdr["name"] == "From":
             message["from"] = hdr["value"]
         elif hdr["name"] == "Subject":
             message["subject"] = hdr["value"]
-    if message_data["payload"].get("body") and message_data["payload"]["body"]["size"] > 0:
-        message["body"] = message_data["payload"]["body"]
-    else:
-        
-        pprint.pprint(message)
-    pprint.pprint(message_data)
-    
+    # pprint.pprint(message)
+    print("To:", message["from"])
+    subject = message["subject"].strip()
+    if not subject.lower().startswith("re:"):
+        subject = "Re: " + subject
+    print("Subject:", subject)
+    print()
+    body = "\n\n".join(message["body"])
+    print(body)
+
+# ----------------------------------------------------------------------
+
+def get_body(payload):
+    import base64
+    body = []
+    if payload.get("body", {}).get("size") > 0 and get_content_type(payload) == "text/plain":
+        body.append(base64.b64decode(payload["body"]["data"]).decode("utf-8").replace("\r\n", "\n"))
+    for part in payload.get("parts", []):
+        body.extend(get_body(part))
+    return body
+
+# ----------------------------------------------------------------------
+
+def get_content_type(payload):
+    for hdr in payload["headers"]:
+        if hdr["name"] == "Content-Type":
+            return hdr["value"].split(";")[0]
+    return None
+
 # ----------------------------------------------------------------------
 
 def metadata(gmail, message_id):
     # https://developers.google.com/gmail/api/v1/reference/users/messages/get
     message_data = gmail.users().messages().get(userId="me", id=message_id, format="metadata").execute()
-    message = {"size": message_data["sizeEstimate"], "id": message_id}
+    message = {"size": message_data["sizeEstimate"], "id": message_id, **message_data}
+    del message["payload"]
     for hdr in message_data["payload"]["headers"]:
         if hdr["name"] == "From":
             message["from"] = hdr["value"]
