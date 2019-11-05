@@ -93,8 +93,14 @@ def make_reply(gmail, message_id):
 def get_body(payload):
     import base64
     body = []
+    # pprint.pprint(payload)
     if payload.get("body", {}).get("size") > 0 and get_content_type(payload) == "text/plain":
-        body.append(base64.b64decode(payload["body"]["data"]).decode("utf-8").replace("\r\n", "\n"))
+        text = base64.b64decode(payload["body"]["data"])
+        try:
+            body.append(text.decode("utf-8").replace("\r\n", "\n"))
+        except Exception as err:
+            print("ERROR:", err)
+            print(text)
     for part in payload.get("parts", []):
         body.extend(get_body(part))
     return body
