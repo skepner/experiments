@@ -31,7 +31,7 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'] # "https://www.googl
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "-h":
-        print(f"Usage: {sys.argv[0]} [list] [meta] [reply:message-id]", file=sys.stderr)
+        print(f"Usage: {sys.argv[0]} [list] [meta] [reply:message-id] [raw:message-id]", file=sys.stderr)
         exit(1)
     exit_code = 0
     gmail = connect()
@@ -45,6 +45,8 @@ def main():
                 meta(gmail)
             elif action.startswith("reply:"):
                 make_reply(gmail, action[6:])
+            elif action.startswith("raw:"):
+                make_raw(gmail, action[4:])
             else:
                 print(f"ERROR: unrecognized action: {action!r}", file=sys.stderr)
                 exit_code = 1
@@ -72,14 +74,13 @@ def meta(gmail):
 
 def make_reply(gmail, message_id):
     message_data = gmail.users().messages().get(userId="me", id=message_id).execute()
-    message = {"id": message_id, "body": get_body(message_data["payload"])}
+    message = {"id": message_id, "body": get_body(message_data["payload"]), "from": "", "to": "", "cc": ""}
     for hdr in message_data["payload"]["headers"]:
-        if hdr["name"] == "From":
-            message["from"] = hdr["value"]
-        elif hdr["name"] == "Subject":
-            message["subject"] = hdr["value"]
+        nl = hdr["name"].lower()
+        if nl in ["from", "to", "cc", "subject"]:
+            message[nl] = hdr["value"]
     # pprint.pprint(message)
-    print("To:", message["from"])
+    print("To:", ", ".join(en for en in [message["from"], message["to"], message["cc"]] if en))
     subject = message["subject"].strip()
     if not subject.lower().startswith("re:"):
         subject = "Re: " + subject
@@ -95,7 +96,7 @@ def get_body(payload):
     body = []
     # pprint.pprint(payload)
     if payload.get("body", {}).get("size") > 0 and get_content_type(payload) == "text/plain":
-        text = base64.b64decode(payload["body"]["data"])
+        text = base64.b64decode(payload["body"]["data"].replace("-","+").replace("_","/"))
         try:
             body.append(text.decode("utf-8").replace("\r\n", "\n"))
         except Exception as err:
@@ -112,6 +113,12 @@ def get_content_type(payload):
         if hdr["name"] == "Content-Type":
             return hdr["value"].split(";")[0]
     return None
+
+# ----------------------------------------------------------------------
+
+def make_raw(gmail, message_id):
+    message_data = gmail.users().messages().get(userId="me", id=message_id).execute()
+    pprint.pprint(message_data)
 
 # ----------------------------------------------------------------------
 
