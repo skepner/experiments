@@ -12,6 +12,8 @@
 #pragma GCC diagnostic ignored "-Wsigned-enum-bitfield" // fmt/format.h
 #pragma GCC diagnostic ignored "-Wmissing-noreturn" // fmt/core.h
 #pragma GCC diagnostic ignored "-Wundefined-func-template" // fmt/chrono.h:1182
+#pragma GCC diagnostic ignored "-Wpadded" // fmt/core.h
+#pragma GCC diagnostic ignored "-Wc++20-compat" // fmt/core.h
 
 // #pragma GCC diagnostic ignored "-Wextra-semi-stmt" // fmt/format.h:1242
 // #pragma GCC diagnostic ignored "-Wsign-conversion" // fmt/format.h:2699

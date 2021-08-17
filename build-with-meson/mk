@@ -18,7 +18,7 @@ find_compiler()
     case $(uname) in
         Darwin)
             export CXX=/usr/local/opt/llvm/bin/clang++
-            export CXXFLAGS="-Weverything -Wno-c++98-compat -Wno-c++98-c++11-compat -Wno-c++98-compat-pedantic"
+            export CXXFLAGS="-Weverything -Wno-c++98-compat -Wno-c++98-c++11-compat -Wno-c++98-compat-pedantic -Wno-documentation-unknown-command"
             MK_TIME=gtime
             ;;
         Linux)
@@ -61,7 +61,7 @@ fail()
 
 # ----------------------------------------------------------------------
 
-trap '{ exit 1 }' ERR
+trap 'fail "build failed"' ERR
 cd "$(dirname $0)"
 case "$1" in
     clean)
