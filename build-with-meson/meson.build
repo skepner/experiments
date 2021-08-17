@@ -21,7 +21,10 @@ endif
 # dep_list += dependency('fmt')
 
 subproject('fmt')
-subproject('xlnt')
+
+cmake = import('cmake')
+cmake.subproject('xlnt')
+
 dep_list = [
   dependency('fmt'),
   dependency('xlnt'),

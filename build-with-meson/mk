@@ -7,6 +7,7 @@ BUILD_DEBUG_DIR=build.debug
 
 build_default()
 {
+    trap 'fail "build failed"' ERR
     if [[ ! -d "${BUILD_DEFAULT_DIR}" ]]; then
         find_compiler
         meson setup "${BUILD_DEFAULT_DIR}" -Ddebug=true -Doptimization=3
@@ -20,6 +21,7 @@ build_default()
 
 build_debug()
 {
+    trap 'fail "build failed"' ERR
     if [[ ! -d "${BUILD_DEBUG_DIR}" ]]; then
         find_compiler
         meson setup "${BUILD_DEBUG_DIR}"  -Ddebug=true -Doptimization=g -Db_sanitize=address

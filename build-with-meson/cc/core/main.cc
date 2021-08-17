@@ -18,7 +18,7 @@ int main()
 {
     // fmt::print("{} [{:.2f}]\n", "hello", average(std::vector<int>{1, 2, 3, 4, 5, 6}));
     fmt::print("{} [{:.2f}]\n", "hello", average(std::vector{1, 2, 3, 4, 5, 6, 7, 8}));
-    er;
+    // er;
     return 0;
 }
 
