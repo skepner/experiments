@@ -1,14 +1,30 @@
 #! /bin/bash
 
-BUILD_DIR=build
+BUILD_DEFAULT_DIR=build
+BUILD_DEBUG_DIR=build.debug
 
-main()
+# ----------------------------------------------------------------------
+
+build_default()
 {
-    if [[ ! -d "${BUILD_DIR}" ]]; then
+    if [[ ! -d "${BUILD_DEFAULT_DIR}" ]]; then
         find_compiler
-        meson setup "${BUILD_DIR}" --buildtype debugoptimized
+        meson setup "${BUILD_DEFAULT_DIR}" -Ddebug=true -Doptimization=3
+        # --buildtype debugoptimized
+        # -Dcpp_args=-O3
     fi
-    ${MK_TIME} meson compile -C "${BUILD_DIR}"
+    ${MK_TIME} meson compile -C "${BUILD_DEFAULT_DIR}"
+}
+
+# ----------------------------------------------------------------------
+
+build_debug()
+{
+    if [[ ! -d "${BUILD_DEBUG_DIR}" ]]; then
+        find_compiler
+        meson setup "${BUILD_DEBUG_DIR}"  -Ddebug=true -Doptimization=g -Db_sanitize=address
+    fi
+    ${MK_TIME} meson compile -C "${BUILD_DEBUG_DIR}"
 }
 
 # ----------------------------------------------------------------------
@@ -18,7 +34,6 @@ find_compiler()
     case $(uname) in
         Darwin)
             export CXX=/usr/local/opt/llvm/bin/clang++
-            export CXXFLAGS="-Weverything -Wno-c++98-compat -Wno-c++98-c++11-compat -Wno-c++98-compat-pedantic -Wno-documentation-unknown-command"
             MK_TIME=gtime
             ;;
         Linux)
@@ -37,7 +52,7 @@ find_compiler()
 
 clean()
 {
-    remove "${BUILD_DIR}"
+    remove "${BUILD_DEFAULT_DIR}" "${BUILD_DEBUG_DIR}"
     for fn in $(cat subprojects/.gitignore); do
         remove subprojects/${fn}
     done
@@ -68,11 +83,11 @@ case "$1" in
         clean
         ;;
     debug)
-        fail "dubug not yet supported"
+        build_debug
         ;;
     -h)
         fail "Usage: $0 [-h] [clean] [debug]"
         ;;
     *)
-        main
+        build_default
 esac
