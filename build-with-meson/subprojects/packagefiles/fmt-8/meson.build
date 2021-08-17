@@ -12,8 +12,8 @@ if libtype == 'shared'
     fmt_interface_cpp_args += [ '-DFMT_SHARED' ]
 endif
 
-if meson.get_compiler('c').get_id() == 'clang'
-  warning_flags = ['-Wno-padded', '-Wno-c++20-compat', '-Wno-documentation-unknown-command']
+if meson.get_compiler('cpp').get_id() == 'clang'
+  warning_flags = ['-Wno-padded', '-Wno-c++20-compat', '-Wno-documentation-unknown-command', '-Wno-signed-enum-bitfield', '-Wno-missing-noreturn', '-Wno-missing-variable-declarations']
 else
   warning_flags = []
 endif
