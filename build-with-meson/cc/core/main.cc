@@ -2,6 +2,7 @@
 #include <vector>
 #include <concepts>
 #include "ext/fmt.hh"
+#include "ext/xlnt.hh"
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +19,7 @@ int main()
 {
     using namespace std::string_literals;
     fmt::print("{} [{}]\n", "hello", average(std::vector{1, 2, 3, 4, 5, 6, 7, 8}));
-    er;
+    // er;
     return 0;
 }
 

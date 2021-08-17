@@ -16,17 +16,6 @@ endif
 
 # ----------------------------------------------------------------------
 
-# fmt = subproject('fmt')
-# dep_list = []
-# dep_list += dependency('fmt')
-
-# cmake = import('cmake')
-# xlnt_subp = cmake.subproject('xlnt')
-# xlnt_dep = xlnt_subp.dependency('xlnt')
-# # summary({'xlnt' : xlnt_subp.target_list()})
-# summary({'xlnt' : xlnt_subp.get_variable('xlnt_test_src')})
-# # cmake.subproject_options().set_override_option('cpp_std', 'c++11')
-
 subproject('fmt')
 subproject('xlnt')
 
