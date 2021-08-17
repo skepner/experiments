@@ -11,7 +11,7 @@ project('bwm', ['cpp'],
        )
 
 if meson.get_compiler('cpp').get_id() == 'clang'
-  add_global_arguments('-Weverything', '-Wno-c++98-compat', '-Wno-c++98-c++11-compat', '-Wno-c++98-compat-pedantic', language : 'cpp')
+  add_project_arguments('-Weverything', '-Wno-c++98-compat', '-Wno-c++98-c++11-compat', '-Wno-c++98-compat-pedantic', language : 'cpp')
 endif
 
 # ----------------------------------------------------------------------
@@ -20,19 +20,19 @@ endif
 # dep_list = []
 # dep_list += dependency('fmt')
 
+# cmake = import('cmake')
+# xlnt_subp = cmake.subproject('xlnt')
+# xlnt_dep = xlnt_subp.dependency('xlnt')
+# # summary({'xlnt' : xlnt_subp.target_list()})
+# summary({'xlnt' : xlnt_subp.get_variable('xlnt_test_src')})
+# # cmake.subproject_options().set_override_option('cpp_std', 'c++11')
+
 subproject('fmt')
-
-cmake = import('cmake')
-cmake.subproject('xlnt')
-
-dep_list = [
-  dependency('fmt'),
-  dependency('xlnt'),
-]
+subproject('xlnt')
 
 # ----------------------------------------------------------------------
 
 exe = executable('bwm', 'cc/core/main.cc',
-                 include_directories : include_directories('./cc'),
-                 dependencies : dep_list,
+                 include_directories : [include_directories('./cc')], # v.get_variable('interface_include_directories')], # , './subprojects/xlnt-1.5.0/include'),
+                 dependencies : [dependency('fmt'), dependency('xlnt')],
                  install : true)

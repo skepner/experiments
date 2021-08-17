@@ -1,16 +1,16 @@
 project('fmt', 'cpp',
     version : '8.0.1',
     license : 'BSD',
-    default_options : ['cpp_std=c++20', 'optimization=3']
+    default_options : ['cpp_std=c++20', 'optimization=3', 'default_library=static']
 )
 
 fmt_private_cpp_args = [ ]
 fmt_interface_cpp_args = [ ]
-libtype = get_option('default_library')
-if libtype == 'shared'
-    fmt_private_cpp_args += [ '-DFMT_EXPORT' ]
-    fmt_interface_cpp_args += [ '-DFMT_SHARED' ]
-endif
+# libtype = get_option('default_library')
+# if libtype == 'shared'
+#     fmt_private_cpp_args += [ '-DFMT_EXPORT' ]
+#     fmt_interface_cpp_args += [ '-DFMT_SHARED' ]
+# endif
 
 if meson.get_compiler('cpp').get_id() == 'clang'
   warning_flags = ['-Wno-padded', '-Wno-c++20-compat', '-Wno-documentation-unknown-command', '-Wno-signed-enum-bitfield', '-Wno-missing-noreturn', '-Wno-missing-variable-declarations']
