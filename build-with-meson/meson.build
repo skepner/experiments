@@ -16,9 +16,16 @@ endif
 
 # ----------------------------------------------------------------------
 
-fmt = subproject('fmt')
-dep_list = []
-dep_list += dependency('fmt')
+# fmt = subproject('fmt')
+# dep_list = []
+# dep_list += dependency('fmt')
+
+subproject('fmt')
+subproject('xlnt')
+dep_list = [
+  dependency('fmt'),
+  dependency('xlnt'),
+]
 
 # ----------------------------------------------------------------------
 
