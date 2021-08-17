@@ -1,0 +1,78 @@
+#! /bin/bash
+
+BUILD_DIR=build
+
+main()
+{
+    if [[ ! -d "${BUILD_DIR}" ]]; then
+        find_compiler
+        meson setup "${BUILD_DIR}" --buildtype debugoptimized
+    fi
+    ${MK_TIME} meson compile -C "${BUILD_DIR}"
+}
+
+# ----------------------------------------------------------------------
+
+find_compiler()
+{
+    case $(uname) in
+        Darwin)
+            export CXX=/usr/local/opt/llvm/bin/clang++
+            export CXXFLAGS="-Weverything -Wno-c++98-compat -Wno-c++98-c++11-compat -Wno-c++98-compat-pedantic"
+            MK_TIME=gtime
+            ;;
+        Linux)
+            export CXX=g++-11
+            MK_TIME=time
+            ;;
+        *)
+            fail "Unsupported platform: $(name)"
+    esac
+    if [[ ! -x "${CXX}" ]]; then
+        fail "Compiler not found: ${CXX}"
+    fi
+}
+
+# ----------------------------------------------------------------------
+
+clean()
+{
+    remove "${BUILD_DIR}"
+    for fn in $(cat subprojects/.gitignore); do
+        remove subprojects/${fn}
+    done
+}
+
+# ----------------------------------------------------------------------
+
+remove()
+{
+    echo "rm -rf $@"
+    rm -rf "$@"
+}
+
+# ----------------------------------------------------------------------
+
+fail()
+{
+    echo "> ERROR: $@" >&2
+    exit 1
+}
+
+# ----------------------------------------------------------------------
+
+trap '{ exit 1 }' ERR
+cd "$(dirname $0)"
+case "$1" in
+    clean)
+        clean
+        ;;
+    debug)
+        fail "dubug not yet supported"
+        ;;
+    -h)
+        fail "Usage: $0 [-h] [clean] [debug]"
+        ;;
+    *)
+        main
+esac
