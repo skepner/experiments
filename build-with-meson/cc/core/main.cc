@@ -20,6 +20,11 @@ int main()
     using namespace std::string_literals;
     fmt::print("{} [{}]\n", "hello", average(std::vector{1, 2, 3, 4, 5, 6, 7, 8}));
     // er;
+
+    xlnt::workbook wb;
+    wb.load("empty.xlsx");
+    const auto ws = wb.active_sheet();
+    fmt::print("{}\n", ws.cell(1, 1).value<std::string>());
     return 0;
 }
 
