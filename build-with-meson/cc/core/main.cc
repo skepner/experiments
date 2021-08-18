@@ -3,6 +3,7 @@
 #include <concepts>
 #include "ext/fmt.hh"
 #include "ext/xlnt.hh"
+#include "ext/range-v3.hh"
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ int main()
     using namespace std::string_literals;
     fmt::print("{} [{}]\n", "hello", average(std::vector{1, 2, 3, 4, 5, 6, 7, 8}));
     fmt::print("sizeof(std::string): {}\n", sizeof(std::string));
+    fmt::print("range-v3: {}\n", ranges::views::ints(0, 10) | ranges::to<std::vector>);
     // er;
 
     xlnt::workbook wb;

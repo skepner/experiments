@@ -35,7 +35,6 @@ simdjson_dep = declare_dependency(
   link_with : simdjson,
   compile_args : [
     '-fPIC',
-    '-Werror',
     '-Wall',
     '-Wextra',
     '-Weffc++',

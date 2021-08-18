@@ -25,6 +25,6 @@ project('range-v3', 'cpp', version: '0.11.0',
 
 range_inc = include_directories('include')
 
-range_v3 = declare_dependency(
+range_v3_dep = declare_dependency(
   include_directories : range_inc
 )
