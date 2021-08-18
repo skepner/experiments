@@ -24,6 +24,6 @@ subproject('simdjson')
 # ----------------------------------------------------------------------
 
 exe = executable('bwm', 'cc/core/main.cc',
-                 include_directories : [include_directories('./cc')], # v.get_variable('interface_include_directories')], # , './subprojects/xlnt-1.5.0/include'),
+                 include_directories : include_directories('./cc'),
                  dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson')],
                  install : true)
