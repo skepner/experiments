@@ -20,10 +20,17 @@ subproject('fmt')
 subproject('xlnt')
 # simdjson = import('cmake').subproject('simdjson').dependency('simdjson')
 subproject('simdjson')
+subproject('range-v3')
+
+# std_date
+# pybind11
+# websocketpp
+# asio
+# apache module
 
 # ----------------------------------------------------------------------
 
 exe = executable('bwm', 'cc/core/main.cc',
                  include_directories : include_directories('./cc'),
-                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson')],
+                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3')],
                  install : true)
