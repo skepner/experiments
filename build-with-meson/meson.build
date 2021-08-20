@@ -21,9 +21,9 @@ subproject('xlnt')
 # simdjson = import('cmake').subproject('simdjson').dependency('simdjson')
 subproject('simdjson')
 subproject('range-v3')
+subproject('pybind11')
 
 # std_date
-# pybind11
 # websocketpp
 # asio
 # apache module

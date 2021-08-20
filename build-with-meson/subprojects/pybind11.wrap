@@ -1,0 +1,9 @@
+[wrap-file]
+directory = pybind11-2.7.1
+source_url = https://github.com/pybind/pybind11/archive/v2.7.1.tar.gz
+source_filename = pybind11-2.7.1.tar.gz
+source_hash = 616d1c42e4cf14fa27b2a4ff759d7d7b33006fdc5ad8fd603bb2c22622f27020
+patch_directory = pybind11
+
+[provide]
+pybind11 = pybind11_dep
