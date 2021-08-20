@@ -42,13 +42,24 @@ test('bwm test 1', bwm)
 # https://github.com/mesonbuild/meson/issues/4677
 # ----------------------------------------------------------------------
 
-pyb_lib = import('python').find_installation('python3').extension_module(
+python3 = import('python').find_installation('python3')
+
+pyb_lib = python3.extension_module(
   'pyb',
   sources : ['cc/core/py.cc'],
   include_directories : include_directories('./cc'),
   dependencies : [dependency('python3'), dependency('pybind11'), dependency('fmt')],
   install : true)
 
-# test('pyb test 1', pyb_lib)
+# https://gabmus.org/posts/python-unittest-meson/
+# envdata = environment()
+# python_paths = [join_paths(meson.current_build_dir(), '..')]
+# envdata.append('PYTHONPATH', python_paths)
+# envdata.append('TESTS_BUILDDIR', meson.current_build_dir())
+test('pyb test 1', python3,
+     args : ['-V'],
+     # args: ['-m', 'unittest', 'tests'],
+     # env: envdata
+    )
 
 # ----------------------------------------------------------------------
