@@ -25,9 +25,10 @@ int main()
     // er;
 
     xlnt::workbook wb;
-    wb.load("empty.xlsx");
+    // wb.load("empty.xlsx");
     const auto ws = wb.active_sheet();
-    fmt::print("{}\n", ws.cell(1, 1).value<std::string>());
+    // fmt::print("{}\n", ws.cell(1, 1).value<std::string>());
+
     return 0;
 }
 

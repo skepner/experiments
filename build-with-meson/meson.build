@@ -30,21 +30,25 @@ subproject('pybind11')
 
 # ----------------------------------------------------------------------
 
-exe = executable('bwm', 'cc/core/main.cc',
+bwm = executable('bwm', 'cc/core/main.cc',
                  include_directories : include_directories('./cc'),
                  dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3')],
                  install : true)
+
+test('bwm test 1', bwm)
 
 # ----------------------------------------------------------------------
 # python module
 # https://github.com/mesonbuild/meson/issues/4677
 # ----------------------------------------------------------------------
 
-import('python').find_installation('python3').extension_module(
+pyb_lib = import('python').find_installation('python3').extension_module(
   'pyb',
   sources : ['cc/core/py.cc'],
   include_directories : include_directories('./cc'),
   dependencies : [dependency('python3'), dependency('pybind11'), dependency('fmt')],
   install : true)
+
+# test('pyb test 1', pyb_lib)
 
 # ----------------------------------------------------------------------
