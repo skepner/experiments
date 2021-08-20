@@ -34,3 +34,9 @@ exe = executable('bwm', 'cc/core/main.cc',
                  include_directories : include_directories('./cc'),
                  dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3')],
                  install : true)
+
+shared_library('pyb',
+               sources : ['cc/core/py.cc'],
+               include_directories : include_directories('./cc'),
+               dependencies : [dependency('python3'), dependency('pybind11'), dependency('fmt')],
+               install : true)
