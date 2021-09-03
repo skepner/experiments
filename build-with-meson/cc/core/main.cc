@@ -1,6 +1,9 @@
 #include <numeric>
 #include <vector>
 #include <concepts>
+
+#include <chrono>
+
 #include "ext/fmt.hh"
 #include "ext/xlnt.hh"
 #include "ext/range-v3.hh"
@@ -28,6 +31,10 @@ int main()
     // wb.load("empty.xlsx");
     const auto ws = wb.active_sheet();
     // fmt::print("{}\n", ws.cell(1, 1).value<std::string>());
+
+    const auto today = floor<std::chrono::days>(std::chrono::system_clock::now());
+    const std::chrono::year_month_day ymd{today};
+    fmt::print("[{}] [{} {}->{:%b} {}]\n", today, static_cast<int>(ymd.year()), static_cast<unsigned>(ymd.month()), today, static_cast<unsigned>(ymd.day()));
 
     return 0;
 }

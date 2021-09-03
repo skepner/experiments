@@ -23,7 +23,6 @@ subproject('simdjson')
 subproject('range-v3')
 subproject('pybind11')
 
-# std_date
 # websocketpp
 # asio
 # apache module
