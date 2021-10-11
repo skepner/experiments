@@ -1,23 +1,4 @@
 project('xlnt_all', 'c', 'cpp')
-cm_uninstall = custom_target(
-  'cm_uninstall',
-  input : [],
-  output : ['cm_uninstall.h'],
-  command : [
-    '/usr/local/Cellar/meson/0.59.0/libexec/bin/meson',
-    '--internal',
-    'cmake_run_ctgt',
-    '-o',
-    '@OUTPUT@',
-    '-d',
-    '/Users/eu/GH/experiments/build-with-meson/build/subprojects/xlnt-1.5.0/__CMake_build/source',
-    '/usr/local/Cellar/cmake/3.21.1/bin/cmake',
-    '-P',
-    '/Users/eu/GH/experiments/build-with-meson/build/subprojects/xlnt-1.5.0/__CMake_build/source/cmake_uninstall.cmake',
-    ';;;'
-  ],
-  depends : []
-)
 libstudxml_dir = include_directories('third-party/libstudxml', '.')
 libstudxml_sys = include_directories(is_system : true)
 libstudxml_inc = [libstudxml_dir, libstudxml_sys]
@@ -59,8 +40,8 @@ libstudxml = static_library(
   install : false,
   override_options : ['cpp_std=gnu++11'],
   objects : [],
-  cpp_args : ['-isysroot', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk', '-DLIBSTUDXML_STATIC_LIB=1'],
-  c_args : ['-isysroot', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk', '-DLIBSTUDXML_STATIC_LIB=1'],
+  cpp_args : ['-DLIBSTUDXML_STATIC_LIB=1'],
+  c_args : ['-DLIBSTUDXML_STATIC_LIB=1'],
   pic : true
 )
 libstudxml_dep = declare_dependency(
@@ -266,24 +247,12 @@ xlnt = shared_library(
   ],
   install_dir : 'lib',
   cpp_args : [
-    '-Wno-c++98-compat',
-    '-Wno-c++98-compat-pedantic',
-    '-Wno-padded',
-    '-Wno-documentation-unknown-command',
-    '-Wno-unknown-pragmas',
-    '-Wno-unknown-warning-option',
-    '-Wno-newline-eof',
-    '-Wno-covered-switch-default',
-    '-Wno-exit-time-destructors',
-    '-Wno-missing-braces',
-    '-isysroot',
-    '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk',
     '-DXLNT_SHARED=1',
     '-Dxlnt_EXPORTS',
     '-Wno-undef',
     '-Wno-shorten-64-to-32'
   ],
-  c_args : ['-isysroot', '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk', '-DXLNT_SHARED=1', '-Dxlnt_EXPORTS']
+  c_args : ['-DXLNT_SHARED=1', '-Dxlnt_EXPORTS']
 )
 xlnt_dep = declare_dependency(
   link_args : [],

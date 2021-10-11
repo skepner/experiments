@@ -7,31 +7,15 @@
 
 #pragma GCC diagnostic push
 #ifdef __clang__
-// 8.0.1
+// 8.0.1, clang 13
+#pragma GCC diagnostic ignored "-Wreserved-identifier" // identifier '_a' is reserved because it starts with '_' at global scope (bug in clang13 ?)
 #pragma GCC diagnostic ignored "-Wdocumentation-unknown-command"
 #pragma GCC diagnostic ignored "-Wsigned-enum-bitfield" // fmt/format.h
 #pragma GCC diagnostic ignored "-Wmissing-noreturn" // fmt/core.h
 #pragma GCC diagnostic ignored "-Wundefined-func-template" // fmt/chrono.h:1182
-#pragma GCC diagnostic ignored "-Wpadded" // fmt/core.h
-#pragma GCC diagnostic ignored "-Wc++20-compat" // fmt/core.h
-
-// #pragma GCC diagnostic ignored "-Wextra-semi-stmt" // fmt/format.h:1242
-// #pragma GCC diagnostic ignored "-Wsign-conversion" // fmt/format.h:2699
-// #pragma GCC diagnostic ignored "-Wdouble-promotion" // fmt/core.h:769
-// #pragma GCC diagnostic ignored "-Wshadow" // fmt/chrono.h
-// #pragma GCC diagnostic ignored "-Wshadow-field" // fmt/core.h
-// #pragma GCC diagnostic ignored "-Wundef" // fmt/core.h
-// #pragma GCC diagnostic ignored "-Wunused-template" // fmt/chrono.h
-// #pragma GCC diagnostic ignored "-Wnon-virtual-dtor" // fmt/core.h
-
-
-// clang 11
-// #pragma GCC diagnostic ignored "-Wsuggest-override"
-// #pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
-
-// #pragma GCC diagnostic ignored ""
-// #pragma GCC diagnostic ignored ""
-// #pragma GCC diagnostic ignored ""
+#pragma GCC diagnostic ignored "-Wpadded"
+#pragma GCC diagnostic ignored "-Wc++20-compat"
+#pragma GCC diagnostic ignored "-Wreserved-identifier"
 #endif
 
 #ifdef __GNUG__

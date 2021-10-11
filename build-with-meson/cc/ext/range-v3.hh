@@ -2,7 +2,9 @@
 
 #pragma GCC diagnostic push
 #ifdef __clang__
-// 0.11.0
+// 0.11.0 clang 13
+#pragma GCC diagnostic ignored "-Wreserved-identifier"
+// 0.11.0 clang 12
 #pragma GCC diagnostic ignored "-Wdocumentation"
 #pragma GCC diagnostic ignored "-Wdocumentation-unknown-command"
 #pragma GCC diagnostic ignored "-Wold-style-cast"
