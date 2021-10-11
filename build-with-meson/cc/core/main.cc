@@ -20,6 +20,41 @@ template <Number N> constexpr double average(const std::vector<N>& data)
 
 // ----------------------------------------------------------------------
 
+struct PackageVersion
+{
+    int major;
+    int minor;
+    int patch;
+};
+
+namespace grammar
+{
+    namespace dsl = lexy::dsl;
+
+    struct version : lexy::token_production
+    {
+        struct forbidden_build_string
+        {
+            static constexpr auto name = "build string not supported";
+        };
+
+        // Match three integers separated by dots, or the special tag "unreleased".
+        static constexpr auto rule = [] {
+            auto number = dsl::try_(dsl::integer<int>(dsl::digits<>), dsl::nullopt);
+            auto dot = dsl::try_(dsl::period, dsl::find(dsl::digit<>));
+            auto dot_version = dsl::times<3>(number, dsl::sep(dot)) + dsl::peek_not(dsl::lit_c<'-'>).error<forbidden_build_string>;
+
+            auto unreleased = LEXY_LIT("unreleased");
+
+            return unreleased | dsl::else_ >> dot_version;
+        }();
+
+        // Construct a PackageVersion as the result of the production.
+        static constexpr auto value = lexy::bind(lexy::construct<PackageVersion>, lexy::_1 or 0, lexy::_2 or 0, lexy::_3 or 0);
+    };
+
+} // namespace grammar
+
 // namespace ast
 // {
 // struct address
@@ -100,8 +135,9 @@ int main()
     const std::chrono::year_month_day ymd{today};
     fmt::print("[{}] [{} {}->{:%b} {}]\n", today, static_cast<int>(ymd.year()), static_cast<unsigned>(ymd.month()), today, static_cast<unsigned>(ymd.day()));
 
-    // auto message = lexy::parse<grammar::message>("a@a.a", lexy_ext::report_error);
-    // message.print();
+    std::string version_source{"1.67.42"};
+    auto version = lexy::parse<grammar::version>(version_source, lexy_ext::report_error);
+    // fmt::print("version: {}", version.value());
 
     return 0;
 }
