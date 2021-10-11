@@ -7,6 +7,7 @@
 #include "ext/fmt.hh"
 #include "ext/xlnt.hh"
 #include "ext/range-v3.hh"
+#include "ext/lexy.hh"
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,69 @@ template <Number N> constexpr double average(const std::vector<N>& data)
 }
 
 // ----------------------------------------------------------------------
+
+// namespace ast
+// {
+// struct address
+// {
+//     std::optional<std::string> display_name;
+//     std::string                local_part;
+//     std::string                domain;
+
+//     // void print() const
+//     // {
+//     //     if (display_name)
+//     //         std::printf("%s <%s@%s> ", display_name->c_str(), local_part.c_str(), domain.c_str());
+//     //     else
+//     //         std::printf("%s@%s ", local_part.c_str(), domain.c_str());
+//     // }
+// };
+
+// struct message
+// {
+//     std::vector<address> from;
+//     std::vector<address> to;
+//     std::vector<address> cc;
+//     std::string          subject;
+//     std::string          body;
+
+//     void print() const
+//     {
+//         fmt::print("From: {}\n", "from");
+//         // for (auto& addr : from)
+//         //     addr.print();
+//         // std::putchar('\n');
+//         // std::fputs("To: ", stdout);
+//         // for (auto& addr : to)
+//         //     addr.print();
+//         // std::putchar('\n');
+//         // std::fputs("Cc: ", stdout);
+//         // for (auto& addr : cc)
+//         //     addr.print();
+//         // std::putchar('\n');
+//         // std::printf("Subject:%s\n", subject.c_str());
+
+//         // std::putchar('\n');
+
+//         // std::printf("%s", body.c_str());
+//     }
+// };
+
+// } // namespace ast
+
+// namespace grammar
+// {
+//     namespace dsl = lexy::dsl;
+
+//     struct message
+//     {
+//         static constexpr auto rule = dsl::newline; // dsl::p<fields> + dsl::newline + (LEXY_MEM(body) = dsl::p<body>);
+//         static constexpr auto value = lexy::as_aggregate<ast::message>;
+//     };
+// } // namespace grammar
+
+// ----------------------------------------------------------------------
+
 
 int main()
 {
@@ -35,6 +99,9 @@ int main()
     const auto today = floor<std::chrono::days>(std::chrono::system_clock::now());
     const std::chrono::year_month_day ymd{today};
     fmt::print("[{}] [{} {}->{:%b} {}]\n", today, static_cast<int>(ymd.year()), static_cast<unsigned>(ymd.month()), today, static_cast<unsigned>(ymd.day()));
+
+    // auto message = lexy::parse<grammar::message>("a@a.a", lexy_ext::report_error);
+    // message.print();
 
     return 0;
 }

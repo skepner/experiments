@@ -7,6 +7,7 @@ project('bwm', ['cpp'],
           'warning_level=3',
           'cpp_std=c++20',
           'buildtype=debugoptimized',
+          'werror=false'
         ],
        )
 
@@ -17,8 +18,8 @@ endif
 # ----------------------------------------------------------------------
 
 cmake = import('cmake')
+lexy = cmake.subproject('lexy').dependency('lexy_core')
 
-lexy = cmake.subproject('lexy').dependency('lexy')
 subproject('fmt')
 subproject('xlnt')
 # simdjson = import('cmake').subproject('simdjson').dependency('simdjson')
@@ -34,7 +35,9 @@ subproject('pybind11')
 
 bwm = executable('bwm', 'cc/core/main.cc',
                  include_directories : include_directories('./cc'),
-                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3'), lexy],
+                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3'),
+                                 lexy
+                                ],
                  install : true)
 
 test('bwm test 1', bwm)

@@ -4,4 +4,5 @@ xlnt-1.5.0
 simdjson-0.9.7
 range-v3-*
 pybind11-*
+lexy
 unused
