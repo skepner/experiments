@@ -135,9 +135,10 @@ int main()
     const std::chrono::year_month_day ymd{today};
     fmt::print("[{}] [{} {}->{:%b} {}]\n", today, static_cast<int>(ymd.year()), static_cast<unsigned>(ymd.month()), today, static_cast<unsigned>(ymd.day()));
 
-    std::string version_source{"1.67.42"};
-    auto version = lexy::parse<grammar::version>(version_source, lexy_ext::report_error);
-    // fmt::print("version: {}", version.value());
+    std::string version_source{"1.6.7-2"};
+    const auto version = lexy::parse<grammar::version>(lexy::buffer(version_source), lexy_ext::report_error);
+    fmt::print("version: {}.{}.{}\n", version.value().major, version.value().minor, version.value().patch);
+    fmt::print("version parsing errors: {}\n{}\n", version.error_count(), version.errors());
 
     return 0;
 }
