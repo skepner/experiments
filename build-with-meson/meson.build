@@ -16,6 +16,9 @@ endif
 
 # ----------------------------------------------------------------------
 
+cmake = import('cmake')
+
+lexy = cmake.subproject('lexy').dependency('lexy')
 subproject('fmt')
 subproject('xlnt')
 # simdjson = import('cmake').subproject('simdjson').dependency('simdjson')
@@ -31,7 +34,7 @@ subproject('pybind11')
 
 bwm = executable('bwm', 'cc/core/main.cc',
                  include_directories : include_directories('./cc'),
-                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3')],
+                 dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3'), lexy],
                  install : true)
 
 test('bwm test 1', bwm)
@@ -47,7 +50,7 @@ pyb_lib = python3.extension_module(
   'pyb',
   sources : ['cc/core/py.cc'],
   include_directories : include_directories('./cc'),
-  dependencies : [dependency('python3'), dependency('pybind11'), dependency('fmt')],
+  dependencies : [dependency('python3'), dependency('pybind11'), dependency('fmt'), dependency('lexy')],
   install : true)
 
 # https://gabmus.org/posts/python-unittest-meson/
