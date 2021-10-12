@@ -33,7 +33,7 @@ subproject('pybind11')
 
 # ----------------------------------------------------------------------
 
-bwm = executable('bwm', 'cc/core/main.cc',
+bwm = executable('bwm', 'cc/core/main.cc', 'cc/core/virus-name.cc',
                  include_directories : include_directories('./cc'),
                  dependencies : [dependency('fmt'), dependency('xlnt'), dependency('simdjson'), dependency('range-v3'),
                                  lexy

@@ -25,7 +25,8 @@
 #include <lexy/action/parse.hpp> // lexy::parse
 #include <lexy/callback.hpp>     // value callbacks
 #include <lexy/dsl.hpp>          // lexy::dsl::*
-#include <lexy/input/buffer.hpp>
+// #include <lexy/input/buffer.hpp>
+#include <lexy/input/string_input.hpp>
 #include <lexy_ext/report_error.hpp> // lexy_ext::report_error
 
 #endif
