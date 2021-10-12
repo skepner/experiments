@@ -41,6 +41,8 @@ namespace ae::virus::name
         static constexpr auto OPEN = dsl::lit_c<'('>;
         static constexpr auto CLOSE = dsl::lit_c<')'>;
         static constexpr auto SLASH = dsl::lit_c<'/'>;
+        static constexpr auto UNDERLINE = dsl::lit_c<'_'>;
+        static constexpr auto DASH = dsl::lit_c<'-'>;
 
         template <typename T> inline void print_type(T&& val, std::string_view name) { fmt::print("{}: {}\n", name, typeid(val).name());
             if constexpr (! std::is_same_v<std::decay_t<T>, lexy::nullopt>) { fmt::print("{}: \"{}\"\n", name, val); }
@@ -63,7 +65,7 @@ namespace ae::virus::name
             };
 
             // A | AH3 | AH3N2 | A(H3N2) | A(H3)
-            static constexpr auto rule = A >> dsl::opt(dsl::p<hn> | OPEN >> dsl::p<hn> + CLOSE); // | (SLASH + dsl::peek(H) + dsl::peek(dsl::digit<>)) >> dsl::p<hn>);
+            static constexpr auto rule = A >> dsl::opt(dsl::p<hn> | OPEN >> dsl::p<hn> + CLOSE);
             static constexpr auto value = lexy::callback<part_t>( //
                 [](lexy::nullopt) {
                     return part_t{"A", part_t::subtype};
@@ -80,14 +82,21 @@ namespace ae::virus::name
             static constexpr auto value = lexy::callback<part_t>([]() { return part_t{"B", part_t::subtype}; });
         };
 
+        struct alpha
+        {
+            static constexpr auto rule = dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / UNDERLINE / DASH / dsl::ascii::blank));
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha}; });
+        };
+
         struct parts
         {
-            static constexpr auto rule = (dsl::p<subtype_a> | dsl::p<subtype_b>) >> dsl::lit_c<'/'>;
+            static constexpr auto whitespace = dsl::ascii::blank; // auto skip whitespaces
+            static constexpr auto rule = (dsl::p<subtype_a> | dsl::p<subtype_b>) + SLASH + dsl::p<alpha>;
             // static constexpr auto rule = dsl::p<subtype_a> + dsl::lit_c<'/'>;
             // dsl::eof
 
             // static constexpr auto rule = dsl::newline; // dsl::p<fields> + dsl::newline + (LEXY_MEM(body) = dsl::p<body>);
-            static constexpr auto value = lexy::construct<part_t>; // lexy::as_aggregate<part_t>;
+            static constexpr auto value = lexy::construct<parts_t>; // lexy::as_aggregate<part_t>;
         };
     } // namespace grammar
 
@@ -154,12 +163,16 @@ void virus_name_parsing_test()
     const std::array data{
         TestData{"A/SINGAPORE/INFIMH-16-0019/2016",                                    {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A(H3N2)/SINGAPORE/INFIMH-16-0019/2016",                              {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
+        TestData{"A(H3N2) / SINGAPORE /INFIMH-16-0019/2016",                              {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A(H3)/SINGAPORE/INFIMH-16-0019/2016",                              {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"AH3N2/SINGAPORE/INFIMH-16-0019/2016",                                {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A/H3N2/SINGAPORE/INFIMH-16-0019/2016",                                {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
+        TestData{"A/HUMAN/SINGAPORE/INFIMH-16-0019/2016",                                {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A/SINGAPORE/INFIMH-16-0019/16",                                      {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A/ SINGAPORE/INFIMH-16-0019/16",                                     {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A/SINGAPORE /INFIMH-16-0019/16",                                     {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
+        TestData{"A/SOUTH AFRICA/19/16",                                     {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
+        TestData{"A / SOUTH AFRICA/19/16",                                     {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         // TestData{"A/SINGAPORE/INFIMH-16-0019/2016 CL2  X-307A",                        {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", Reassortant{"NYMC-307A"}, P, "CL2"}},
         // TestData{"A/SINGAPORE/INFIMH-16-0019/2016 NEW CL2  X-307A",                    {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", Reassortant{"NYMC-307A"}, P, "CL2"}},
         // TestData{"A/SINGAPORE/INFIMH-16-0019/2016 CL2 NEW X-307A",                     {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", Reassortant{"NYMC-307A"}, P, "CL2"}},
