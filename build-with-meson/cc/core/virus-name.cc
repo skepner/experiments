@@ -1,4 +1,5 @@
 #include <array>
+#include <vector>
 #include "ext/fmt.hh"
 #include "ext/lexy.hh"
 
@@ -40,9 +41,7 @@ namespace ae::virus::name
         static constexpr auto N = dsl::lit_c<'N'>;
         static constexpr auto OPEN = dsl::lit_c<'('>;
         static constexpr auto CLOSE = dsl::lit_c<')'>;
-        static constexpr auto SLASH = dsl::lit_c<'/'>;
         static constexpr auto UNDERLINE = dsl::lit_c<'_'>;
-        static constexpr auto DASH = dsl::lit_c<'-'>;
 
         template <typename T> inline void print_type(T&& val, std::string_view name) { fmt::print("{}: {}\n", name, typeid(val).name());
             if constexpr (! std::is_same_v<std::decay_t<T>, lexy::nullopt>) { fmt::print("{}: \"{}\"\n", name, val); }
@@ -84,19 +83,46 @@ namespace ae::virus::name
 
         struct alpha
         {
-            static constexpr auto rule = dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / UNDERLINE / DASH / dsl::ascii::blank));
+            static constexpr auto rule = dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
             static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha}; });
+        };
+
+        struct alpha_num
+        {
+            static constexpr auto rule = dsl::peek(dsl::ascii::alpha + dsl::lookahead(dsl::ascii::digit, dsl::slash)) >> dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha_num}; });
+        };
+
+        struct num_alpha
+        {
+            static constexpr auto rule = dsl::peek(dsl::ascii::digit + dsl::lookahead(dsl::ascii::alpha, dsl::slash)) >> dsl::capture(dsl::ascii::digit + dsl::while_(dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::num_alpha}; });
+        };
+
+        struct digits
+        {
+            static constexpr auto rule = dsl::peek(dsl::ascii::digit) >> dsl::capture(dsl::digits<>) + LEXY_DEBUG("digits-matched");
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::digits}; });
+        };
+
+        struct tail_parts
+        {
+            static constexpr auto rule = dsl::list(dsl::p<alpha_num> | dsl::p<num_alpha> | dsl::p<digits> | dsl::else_ >> dsl::p<alpha>, dsl::sep(dsl::slash));
+            static constexpr auto value = lexy::as_list<std::vector<part_t>>;
         };
 
         struct parts
         {
             static constexpr auto whitespace = dsl::ascii::blank; // auto skip whitespaces
-            static constexpr auto rule = (dsl::p<subtype_a> | dsl::p<subtype_b>) + SLASH + dsl::p<alpha>;
-            // static constexpr auto rule = dsl::p<subtype_a> + dsl::lit_c<'/'>;
-            // dsl::eof
+            static constexpr auto rule = (dsl::p<subtype_a> | dsl::p<subtype_b>) + dsl::slash + dsl::p<tail_parts> + dsl::eof;
 
-            // static constexpr auto rule = dsl::newline; // dsl::p<fields> + dsl::newline + (LEXY_MEM(body) = dsl::p<body>);
-            static constexpr auto value = lexy::construct<parts_t>; // lexy::as_aggregate<part_t>;
+            static constexpr auto value = lexy::callback<parts_t>(
+                [](auto subtype, auto rest) {
+                    parts_t parts{subtype};
+                    std::move(std::begin(rest), std::end(rest), std::next(std::begin(parts)));
+                    return parts;
+                }
+            );
         };
     } // namespace grammar
 
@@ -143,8 +169,9 @@ template <> struct fmt::formatter<ae::virus::name::part_t> : fmt::formatter<eu::
 ae::virus::name::Name ae::virus::name::parse(std::string_view source)
 {
         fmt::print(">>> parsing \"{}\"\n", source);
+        // lexy::trace<grammar::parts>(stderr, lexy::string_input{source});
         const auto result = lexy::parse<grammar::parts>(lexy::string_input{source}, lexy_ext::report_error);
-        fmt::print(">>> --> {}\n", result.value());
+        fmt::print("    {}\n", result.value());
         return {};
 }
 
