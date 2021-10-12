@@ -22,7 +22,7 @@ namespace ae::virus::name
 
     struct part_t
     {
-        enum type { undef, subtype, alpha, alpha_num, num_alpha, digits, other };
+        enum type { undef, subtype, alpha, alpha_digits, digits_alpha, digits, other };
 
         std::string text{};
         enum type type{undef};
@@ -83,20 +83,22 @@ namespace ae::virus::name
 
         struct alpha
         {
-            static constexpr auto rule = dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
+            static constexpr auto symbol = dsl::ascii::alpha / UNDERLINE / dsl::hyphen / dsl::ascii::blank;
+            static constexpr auto rule = dsl::lookahead(symbol, dsl::slash) >> dsl::capture(dsl::while_(symbol));
             static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha}; });
         };
 
-        struct alpha_num
+        struct alpha_digits
         {
-            static constexpr auto rule = dsl::peek(dsl::ascii::alpha + dsl::lookahead(dsl::ascii::digit, dsl::slash)) >> dsl::capture(dsl::ascii::alpha + dsl::while_(dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
-            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha_num}; });
+            static constexpr auto symbol = dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen;
+            static constexpr auto rule = dsl::peek(dsl::ascii::alpha + dsl::lookahead(symbol, dsl::slash)) >> dsl::capture(dsl::while_(symbol));
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::alpha_digits}; });
         };
 
-        struct num_alpha
+        struct digits_alpha
         {
-            static constexpr auto rule = dsl::peek(dsl::ascii::digit + dsl::lookahead(dsl::ascii::alpha, dsl::slash)) >> dsl::capture(dsl::ascii::digit + dsl::while_(dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen / dsl::ascii::blank));
-            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::num_alpha}; });
+            static constexpr auto rule = dsl::peek(dsl::ascii::digit + dsl::lookahead(dsl::ascii::alpha, dsl::slash)) >> dsl::capture(dsl::ascii::digit + dsl::while_(dsl::ascii::alpha / dsl::ascii::digit / UNDERLINE / dsl::hyphen));
+            static constexpr auto value = lexy::callback<part_t>([](auto lexeme) { return part_t{to_string(lexeme), part_t::digits_alpha}; });
         };
 
         struct digits
@@ -107,7 +109,7 @@ namespace ae::virus::name
 
         struct tail_parts
         {
-            static constexpr auto rule = dsl::list(dsl::p<alpha_num> | dsl::p<num_alpha> | dsl::p<digits> | dsl::else_ >> dsl::p<alpha>, dsl::sep(dsl::slash));
+            static constexpr auto rule = dsl::list(dsl::p<alpha_digits> | dsl::p<digits_alpha> | dsl::p<digits> | dsl::else_ >> dsl::p<alpha>, dsl::sep(dsl::slash));
             static constexpr auto value = lexy::as_list<std::vector<part_t>>;
         };
 
@@ -143,10 +145,10 @@ template <> struct fmt::formatter<enum ae::virus::name::part_t::type> : fmt::for
                 return format_to(ctx.out(), "subtype");
             case part_t::alpha:
                 return format_to(ctx.out(), "alpha");
-            case part_t::alpha_num:
-                return format_to(ctx.out(), "alpha_num");
-            case part_t::num_alpha:
-                return format_to(ctx.out(), "num_alpha");
+            case part_t::alpha_digits:
+                return format_to(ctx.out(), "alpha_digits");
+            case part_t::digits_alpha:
+                return format_to(ctx.out(), "digits_alpha");
             case part_t::digits:
                 return format_to(ctx.out(), "digits");
             case part_t::other:
@@ -169,7 +171,7 @@ template <> struct fmt::formatter<ae::virus::name::part_t> : fmt::formatter<eu::
 ae::virus::name::Name ae::virus::name::parse(std::string_view source)
 {
         fmt::print(">>> parsing \"{}\"\n", source);
-        // lexy::trace<grammar::parts>(stderr, lexy::string_input{source});
+        lexy::trace<grammar::parts>(stderr, lexy::string_input{source});
         const auto result = lexy::parse<grammar::parts>(lexy::string_input{source}, lexy_ext::report_error);
         fmt::print("    {}\n", result.value());
         return {};
@@ -188,6 +190,7 @@ struct TestData
 void virus_name_parsing_test()
 {
     const std::array data{
+        TestData{"A/BRISBANE/01/2018  NYMC-X-311 (18/160)",                            {}}, // to_compare_t{A,              H,            "BRISBANE", "1", "2018", Reassortant{"NYMC-311"}, P, E}}, // "(18/160)" removed by check_nibsc_extra
         TestData{"A/SINGAPORE/INFIMH-16-0019/2016",                                    {}}, // to_compare_t{A,              H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A(H3N2)/SINGAPORE/INFIMH-16-0019/2016",                              {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
         TestData{"A(H3N2) / SINGAPORE /INFIMH-16-0019/2016",                              {}}, // to_compare_t{typ{"A(H3N2)"}, H,            "SINGAPORE", "INFIMH-16-0019",   "2016", R, P, E}},
@@ -216,7 +219,6 @@ void virus_name_parsing_test()
         // TestData{"A/Algeria/G0281/16/2016",                                            {}}, // to_compare_t{A,              H,            "ALGERIA", "G0281-16", "2016", R, P, E}},
         // TestData{"A/chicken/Ghana/7/2015",                                             {}}, // to_compare_t{A,              hst{"CHICKEN"}, "GHANA", "7", "2015", R, P, E}},
         // TestData{"IVR-153 (A/CALIFORNIA/07/2009)",                                     {}}, // to_compare_t{A,              H,            "CALIFORNIA", "7", "2009", Reassortant{"IVR-153"}, P, E}},
-        // TestData{"A/Brisbane/01/2018  NYMC-X-311 (18/160)",                            {}}, // to_compare_t{A,              H,            "BRISBANE", "1", "2018", Reassortant{"NYMC-311"}, P, E}}, // "(18/160)" removed by check_nibsc_extra
         // TestData{"A/Antananarivo/1067/2016 CBER-11B C1.3",                             {}}, // to_compare_t{A,              H,            "ANTANANARIVO", "1067", "2016", Reassortant{"CBER-11B"}, P, "C1.3"}}, // CDC
         // TestData{"A/Montana/50/2016 CBER-07 D2.3",                                     {}}, // to_compare_t{A,              H,            "MONTANA", "50", "2016", Reassortant{"CBER-07"}, P, "D2.3"}}, // CDC
         // TestData{"A/duck/Guangdong/4.30 DGCPLB014-O/2017",                             {}}, // to_compare_t{A,              hst{"DUCK"},  "GUANGDONG", "4.30 DGCPLB014-O", "2017", R, P, E}},
